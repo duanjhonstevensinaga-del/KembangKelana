@@ -1,0 +1,414 @@
+/* ══════════════════════════════════════════════════════════
+   responsive.css — Kisah Anda · Index Page
+   Tambahkan <link rel="stylesheet" href="responsive.css" />
+   SETELAH styles.css di <head>
+   ══════════════════════════════════════════════════════════ */
+
+/* ── WISHLIST BADGE ── */
+.nav-wishlist-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.wishlist-badge {
+    position: absolute;
+    top: -3px;
+    right: -4px;
+    min-width: 16px;
+    height: 16px;
+    background: #e05a5a;
+    color: #fff;
+    font-size: 9px;
+    font-weight: 800;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 3px;
+    line-height: 1;
+    pointer-events: none;
+}
+
+/* ══════════════════════════════════════════════════════════
+   ── BREAKPOINT: TABLET LEBAR (≤ 1200px) ──
+   ══════════════════════════════════════════════════════════ */
+@media (max-width: 1200px) {
+    /* Search card — ganti fixed width ke fluid */
+    .search-card {
+        width: calc(100% - 3rem);
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    /* Voyager mode — lepas fixed width/height */
+    .search-card.voyager-mode {
+        width: calc(100% - 3rem);
+        height: auto;
+        top: 5.5rem;
+        bottom: 1rem;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .voyager-body {
+        grid-template-columns: 1fr auto 1fr;
+        gap: 1rem;
+    }
+
+    .voyager-left { margin-left: 24px; }
+
+    .luggage-img  { width: 80px; height: 200px; }
+    .voyager-illus { width: 140px; }
+
+    .voyager-bar {
+        grid-template-columns:
+            minmax(100px, 1fr) auto
+            minmax(100px, 1fr) auto
+            minmax(100px, 1fr) auto;
+        padding: 0.6rem 0.4rem 0.6rem 0.8rem;
+        margin: 0 -1.5rem -1.25rem;
+    }
+
+    .vbar-field   { padding: 0 0.6rem; }
+    .budget-btn   { font-size: 12px; padding: 0 1rem; height: 46px; }
+}
+
+/* ══════════════════════════════════════════════════════════
+   ── BREAKPOINT: TABLET (≤ 1024px) ──
+   ══════════════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+    .nav { padding: 1.2rem 1.5rem; }
+    .nav-links { gap: 1.2rem; }
+    .nav-links a { font-size: 13px; }
+
+    .hero-content { padding: 6.5rem 2.5rem 0; }
+    .hero-headline { font-size: clamp(42px, 6vw, 68px); }
+
+    /* Search card tabs — biarkan tab-option tetap tapi sedikit lebih kecil */
+    .tab-option { font-size: 12px; margin-left: 0.75rem; }
+}
+
+/* ══════════════════════════════════════════════════════════
+   ── BREAKPOINT: MOBILE BESAR (≤ 768px) ──
+   ══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+    /* ── NAV ── */
+    .nav { padding: 1rem 1.2rem; }
+    .nav-links { display: none; }          /* sembunyikan link, pakai hamburger */
+    .nav-logo-img { width: 40px; height: 40px; }
+    .nav-right { gap: 0.9rem; }
+
+    /* ── HERO ── */
+    .hero-content {
+        padding: 5.5rem 1.5rem 0;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .hero-headline {
+        font-size: clamp(36px, 10vw, 52px);
+        margin-bottom: 1rem;
+    }
+
+    .hero-sub {
+        font-size: 13px;
+        max-width: 320px;
+    }
+
+    /* ── SEARCH CARD ── */
+    .search-card {
+        bottom: 1.2rem;
+        width: calc(100% - 2rem);
+        padding: 1rem;
+        border-radius: 16px;
+        /* Pastikan tidak overflow layar */
+        max-height: calc(100vh - 7rem);
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* ── TABS ── */
+    .search-tabs {
+        flex-wrap: wrap;
+        gap: 0.3rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .tab { font-size: 13px; margin-right: 1rem; }
+    .tab-divider { display: none; }
+    .tab-option  { display: none; }
+
+    /* ── EKSPLORE & DISCOVERY FIELDS — stack vertical ── */
+    .search-fields,
+    .discovery-fields {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .field {
+        border-right: none;
+        border-bottom: 1px solid #eee;
+        padding: 10px 0;
+    }
+
+    .field:first-child { padding-left: 0; }
+    .field:last-child  { border-bottom: none; padding-bottom: 0; }
+    .field-cta         { padding-top: 10px; }
+
+    .cari-btn {
+        width: 100%;
+        padding: 14px;
+        border-radius: 12px;
+        font-size: 16px;
+        height: auto;
+    }
+
+    /* Chips — scroll horizontal, tidak wrap */
+    .place-options {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 4px;
+        scrollbar-width: none;
+    }
+    .place-options::-webkit-scrollbar { display: none; }
+
+    /* ── VOYAGER MODE ── */
+    .search-card.voyager-mode {
+        top: 4.5rem;
+        bottom: 1rem;
+        height: auto;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        width: calc(100% - 2rem);
+        /* Voyager mode: full-height sheet di mobile */
+        max-height: none;
+    }
+
+    .voyager-body {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        padding: 0 0 1rem;
+    }
+
+    .voyager-left {
+        margin-left: 0;
+        align-items: flex-start;
+    }
+
+    .voyager-title  { font-size: 18px; }
+    .voyager-desc   { font-size: 12px; max-width: 100%; }
+    .gen-btn        { width: 100%; text-align: center; }
+
+    /* Sembunyikan ilustrasi koper di mobile — hemat ruang */
+    .voyager-illus  { display: none; }
+
+    .voyager-card {
+        width: 100%;
+        min-width: unset;
+    }
+
+    /* Voyager bottom bar — stack vertical */
+    .voyager-bar {
+        grid-template-columns: 1fr;
+        gap: 0;
+        margin: 0 -1rem -1rem;
+        padding: 0.8rem 1rem;
+        border-radius: 12px 12px 14px 14px;
+    }
+
+    .vbar-field { padding: 8px 0; }
+
+    .vbar-divider {
+        width: 100%;
+        height: 1px;
+        flex-shrink: 0;
+    }
+
+    .vbar-chips {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding-bottom: 4px;
+    }
+    .vbar-chips::-webkit-scrollbar { display: none; }
+
+    .budget-btn {
+        width: 100%;
+        margin-left: 0;
+        margin-top: 0.5rem;
+        height: 48px;
+        font-size: 14px;
+        border-radius: 12px;
+    }
+
+    /* ── MENU OVERLAY — mobile ── */
+    .menu {
+        padding: 2rem 1.5rem;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .menu-col-links {
+        position: relative;
+        top: auto; left: auto;
+        transform: none;
+        margin-bottom: 2rem;
+    }
+
+    .menu-col-info {
+        position: relative;
+        align-items: center;
+        text-align: center;
+        margin-top: 1.5rem;
+    }
+
+    .menu-col-info-box   { padding: 1rem 1.2rem; border-radius: 14px; }
+    .menu-brand-logo-box { width: 100px; height: 100px; border-radius: 22px; }
+    .menu-brand-logo     { width: 56px; height: 56px; }
+    .menu-brand-name     { font-size: clamp(28px, 8vw, 42px); }
+    .menu-brand-text-box { padding: 0.6rem 1.5rem 0.75rem; border-radius: 14px; }
+}
+
+/* ══════════════════════════════════════════════════════════
+   ── BREAKPOINT: MOBILE KECIL (≤ 480px) ──
+   ══════════════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+
+    /* ── NAV ── */
+    .nav { padding: 0.9rem 1rem; }
+    .nav-icon-btn { width: 28px; height: 28px; }
+    .nav-icon-btn svg { width: 18px; height: 18px; }
+    .nav-logo-img  { width: 36px; height: 36px; }
+    .nav-right { gap: 0.6rem; }
+
+    /* ── HERO ── */
+    .hero-content { padding: 5rem 1.1rem 0; }
+    .hero-headline {
+        font-size: clamp(28px, 9.5vw, 42px);
+        margin-bottom: 0.75rem;
+    }
+    .hero-sub { font-size: 12px; max-width: 280px; }
+
+    /* ── SEARCH CARD ── */
+    .search-card {
+        bottom: 0.8rem;
+        width: calc(100% - 1.6rem);
+        padding: 0.85rem;
+        border-radius: 14px;
+    }
+
+    .tab { font-size: 12px; margin-right: 0.75rem; }
+
+    .field-label  { font-size: 11px; }
+    .field-input  { font-size: 12px; }
+    .place-chip   { font-size: 10px; padding: 3px 8px; white-space: nowrap; }
+
+    .cari-btn     { font-size: 15px; padding: 12px; }
+    .field-select { font-size: 13px; padding: 9px 12px; }
+
+    /* ── VOYAGER ── */
+    .search-card.voyager-mode { top: 4rem; }
+    .voyager-title { font-size: 16px; }
+    .voyager-desc  { font-size: 11px; }
+    .gen-btn       { font-size: 13px; padding: 10px 20px; }
+
+    .vcard-map-placeholder { height: 60px; }
+    .vcard-select-btn      { font-size: 11px; padding: 4px 10px; }
+
+    .vbar-label  { font-size: 10px; }
+    .vbar-input  { font-size: 11px; }
+    .budget-btn  { font-size: 13px; height: 44px; }
+
+    /* Lock box map teaser */
+    .map-lock-box {
+        padding: 0.75rem;
+        border-radius: 10px;
+    }
+    .map-lock-icon { font-size: 22px; }
+    .map-lock-text { font-size: 11px; }
+    .map-lock-btn  { font-size: 10px; padding: 4px 10px; }
+
+    /* ── MENU OVERLAY ── */
+    .menu-brand-logo-box { width: 84px; height: 84px; border-radius: 18px; }
+    .menu-brand-logo     { width: 46px; height: 46px; }
+    .menu-brand-name     { font-size: clamp(22px, 7vw, 34px); letter-spacing: 1px; }
+    .menu-brand-text-box { padding: 0.5rem 1.2rem 0.6rem; border-radius: 12px; }
+    .menu-col-info-box   { padding: 0.85rem 1rem; border-radius: 12px; }
+    .menu-col-info h3    { font-size: 13px; }
+    .menu-col-info h6    { font-size: 11px; }
+}
+
+/* ══════════════════════════════════════════════════════════
+   ── BREAKPOINT: MOBILE SANGAT KECIL (≤ 375px) ──
+   ══════════════════════════════════════════════════════════ */
+@media (max-width: 375px) {
+    .hero-headline { font-size: clamp(24px, 8.5vw, 36px); }
+    .hero-sub { font-size: 11px; max-width: 240px; }
+
+    .search-card {
+        padding: 0.7rem;
+        border-radius: 12px;
+        bottom: 0.6rem;
+        width: calc(100% - 1.2rem);
+    }
+
+    .tab { font-size: 11px; margin-right: 0.5rem; }
+
+    .nav { padding: 0.8rem 0.9rem; }
+    .nav-icon-btn { width: 26px; height: 26px; }
+    .nav-logo-img { width: 32px; height: 32px; }
+    .nav-right { gap: 0.5rem; }
+
+    .cari-btn { font-size: 14px; }
+    .voyager-title { font-size: 15px; }
+    .budget-btn { height: 42px; font-size: 12px; }
+}
+
+/* ══════════════════════════════════════════════════════════
+   ── SAFE AREA — notch & home indicator (iOS/Android) ──
+   ══════════════════════════════════════════════════════════ */
+@supports (padding: env(safe-area-inset-bottom)) {
+    .search-card {
+        padding-bottom: calc(0.85rem + env(safe-area-inset-bottom));
+    }
+
+    .voyager-bar {
+        padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));
+    }
+
+    .nav {
+        padding-top: calc(1rem + env(safe-area-inset-top));
+    }
+}
+
+/* ══════════════════════════════════════════════════════════
+   ── TOUCH — hapus hover ghost state di layar sentuh ──
+   ══════════════════════════════════════════════════════════ */
+@media (hover: none) and (pointer: coarse) {
+    .cari-btn:hover,
+    .gen-btn:hover,
+    .budget-btn:hover {
+        background: var(--teal);
+        transform: none;
+    }
+
+    .place-chip:hover {
+        border-color: #e8e8e8;
+        color: #999;
+    }
+
+    .place-chip.checked:hover {
+        background: var(--teal);
+        border-color: var(--teal);
+        color: #fff;
+    }
+
+    .nav-links a:hover { opacity: 0.9; }
+}
