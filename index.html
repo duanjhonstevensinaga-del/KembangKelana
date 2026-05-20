@@ -14,6 +14,19 @@
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
 </head>
 <body>
+<!-- ── MOBILE NAV OVERLAY ── -->
+<div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
+
+<!-- ── MOBILE NAV DRAWER ── -->
+<div class="mobile-nav-drawer" id="mobileNavDrawer">
+    <ul>
+        <li><a href="#" class="active-link">Beranda</a></li>
+        <li><a href="Blog.html">Blog</a></li>
+        <li><a href="destinasi.html">Destinasi</a></li>
+        <li><a href="history-ulasan.html">History Ulasan</a></li>
+    </ul>
+</div>
+
 <!-- ── NAV ── -->
 <nav class="nav">
     <div class="nav-logo-wrap">
@@ -240,5 +253,51 @@
 <!-- Auth modal terintegrasi — load setelah script_patch.js -->
 <script src="auth-modal.js"></script>
 <script src="paket-auth-gate.js"></script>
+
+<!-- ── MOBILE NAV DRAWER SCRIPT ── -->
+<script>
+(function () {
+    const drawer  = document.getElementById("mobileNavDrawer");
+    const overlay = document.getElementById("mobileNavOverlay");
+    const toggle  = document.getElementById("navToggle");
+
+    if (!drawer || !overlay || !toggle) return;
+
+    let drawerOpen = false;
+
+    function openDrawer() {
+        drawerOpen = true;
+        drawer.classList.add("is-open");
+        overlay.classList.add("is-open");
+    }
+
+    function closeDrawer() {
+        drawerOpen = false;
+        drawer.classList.remove("is-open");
+        overlay.classList.remove("is-open");
+        // Pastikan toggle icon kembali normal jika ditutup via overlay
+        toggle.classList.remove("active");
+    }
+
+    // Intercept klik hamburger: di mobile, buka drawer dulu
+    // Di desktop, hamburger membuka menu GSAP (biarkan script.js handle)
+    toggle.addEventListener("click", function (e) {
+        const isMobile = window.innerWidth <= 768;
+        if (!isMobile) return; // biarkan script.js menangani
+
+        e.stopImmediatePropagation(); // cegah script.js ikut jalan
+        drawerOpen ? closeDrawer() : openDrawer();
+        toggle.classList.toggle("active", drawerOpen);
+    }, true); // capture phase agar jalan sebelum script.js
+
+    // Tutup saat klik overlay
+    overlay.addEventListener("click", closeDrawer);
+
+    // Tutup saat resize ke desktop
+    window.addEventListener("resize", function () {
+        if (window.innerWidth > 768 && drawerOpen) closeDrawer();
+    });
+})();
+</script>
 </body>
 </html>
