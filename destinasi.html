@@ -362,13 +362,12 @@
 <div class="modal-group">
 <label class="modal-label">Foto Destinasi</label>
 <input id="dImg" type="hidden"/>
-<!-- File input diletakkan di luar label agar tidak konflik click event -->
-<input accept="image/*,image/svg+xml" id="dImgFile" style="display:none;" type="file"/>
-<div id="dImgPreviewWrap" style="display:none; margin-bottom:8px; align-items:center; gap:10px;">
+<input accept="image/*" id="dImgFile" style="position:absolute;left:-9999px;opacity:0;width:1px;height:1px;" type="file" onchange="previewDestImg(this)"/>
+<div id="dImgPreviewWrap" style="display:none; margin-bottom:10px; align-items:center; gap:10px;">
 <img alt="preview" id="dImgPreview" src="" style="width:120px;height:90px;object-fit:cover;border-radius:8px; border:1px solid #e0d9cc;"/>
-<button onclick="clearDestImg()" style="font-size:12px;color:#c00;background:none;border:none;cursor:pointer;" type="button">✕ Hapus</button>
+<button onclick="clearDestImg()" style="font-size:12px;color:#c00;background:none;border:none;cursor:pointer;padding:4px;" type="button">✕ Hapus</button>
 </div>
-<button type="button" id="dImgBtn" class="img-upload-label" onclick="document.getElementById('dImgFile').click()">
+<button type="button" id="dImgBtn" class="img-upload-label" onclick="triggerFotoInput()">
   📷 <span id="dImgBtnText">Pilih Foto</span>
 </button>
 </div>

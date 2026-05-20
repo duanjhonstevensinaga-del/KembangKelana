@@ -3,15 +3,9 @@ const SUPABASE_URL      = "https://fvyjlwwurapxbddakdpq.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2eWpsd3d1cmFweGJkZGFrZHBxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNjkxMjUsImV4cCI6MjA5NDY0NTEyNX0.76JVhpxtplY4B0dY7VhBmh2XP_Mzooi84yPA6-vNtb0";
 const supabaseClient    = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-/* ══════════════════════════════════════ ✅ FIX UTAMA: BFCACHE HANDLER ══════════════════════════════════════ */
-// Saat browser memulihkan halaman dari Back-Forward Cache (bfcache),
-// Supabase auth state menjadi stale → paksa reload halaman agar fresh
-window.addEventListener('pageshow', (e) => {
-  if (e.persisted) {
-    // Halaman dipulihkan dari bfcache → reload agar auth state segar
-    window.location.reload();
-  }
-});
+/* ══════════════════════════════════════ BFCACHE: hapus cache agar auth tidak stale ══════════════════════════════════════ */
+// Tandai halaman agar tidak disimpan di bfcache
+window.addEventListener('unload', () => {});
 
 /* ══════════════════════════════════════ HELPER: FORMAT RUPIAH ══════════════════════════════════════ */
 function formatRp(val) {
@@ -26,14 +20,10 @@ function escapeHTML(str = '') {
 }
 
 /* ══════════════════════════════════════ UPLOAD FOTO KE SUPABASE STORAGE ══════════════════════════════════════ */
-// Attach file input listener via JS (lebih reliable dari onchange di HTML)
-document.addEventListener('DOMContentLoaded', () => {
-  const fileInput = document.getElementById('dImgFile');
-  if (fileInput) {
-    fileInput.addEventListener('change', function() {
-      previewDestImg(this);
-    });
-  }
+// Attach setelah semua DOM siap
+window.addEventListener('load', () => {
+  const fi = document.getElementById('dImgFile');
+  if (fi) fi.addEventListener('change', function() { previewDestImg(this); });
 });
 
 function previewDestImg(input) {
@@ -42,21 +32,27 @@ function previewDestImg(input) {
   const preview = document.getElementById('dImgPreview');
   const wrap    = document.getElementById('dImgPreviewWrap');
   const btnText = document.getElementById('dImgBtnText');
-  preview.src = URL.createObjectURL(file);
-  wrap.style.display  = 'flex';
+  if (preview) preview.src = URL.createObjectURL(file);
+  if (wrap)    wrap.style.display = 'flex';
   if (btnText) btnText.textContent = 'Ganti Foto';
 }
 
 function clearDestImg() {
-  const fileInput = document.getElementById('dImgFile');
-  const preview   = document.getElementById('dImgPreview');
-  const wrap      = document.getElementById('dImgPreviewWrap');
-  const btnText   = document.getElementById('dImgBtnText');
-  if (fileInput) fileInput.value = '';
-  document.getElementById('dImg').value = '';
-  if (preview)  { preview.src = ''; }
-  if (wrap)     { wrap.style.display = 'none'; }
-  if (btnText)  { btnText.textContent = 'Pilih Foto'; }
+  const fi      = document.getElementById('dImgFile');
+  const preview = document.getElementById('dImgPreview');
+  const wrap    = document.getElementById('dImgPreviewWrap');
+  const btnText = document.getElementById('dImgBtnText');
+  if (fi)      fi.value = '';
+  const dImg = document.getElementById('dImg');
+  if (dImg)    dImg.value = '';
+  if (preview) preview.src = '';
+  if (wrap)    wrap.style.display = 'none';
+  if (btnText) btnText.textContent = 'Pilih Foto';
+}
+
+function triggerFotoInput() {
+  const fi = document.getElementById('dImgFile');
+  if (fi) fi.click();
 }
 
 async function uploadDestImg(file) {
@@ -479,32 +475,23 @@ function _resetToGuest() {
 }
 
 async function checkAuth() {
-  _loadingDestinations = false; // ← reset guard di sini
-    const hasLogoutFlag = localStorage.getItem('kisahanda_logout')
-        || new URLSearchParams(location.search).get('logout');
+  _loadingDestinations = false;
 
-    if (hasLogoutFlag) {
-        localStorage.removeItem('kisahanda_logout');
-        Object.keys(localStorage).forEach(k => {
-            if (k.startsWith('sb-') || k.includes('supabase')) localStorage.removeItem(k);
-        });
-        try { await supabaseClient.auth.signOut({ scope: 'local' }); } catch (_) {}
-        history.replaceState(null, '', location.pathname +
-            (location.search.replace(/[?&]logout=1/, '') || ''));
-        _resetToGuest();
-        return;
-    }
+  // Bersihkan ?logout=1 dari URL kalau masih ada (legacy)
+  if (new URLSearchParams(location.search).get('logout')) {
+    history.replaceState(null, '', location.pathname);
+  }
 
-    const { data: { session } } = await supabaseClient.auth.getSession();
-    if (session?.user) {
-        currentUser = session.user;
-        isAdmin     = currentUser.email === ADMIN_EMAIL || currentUser.user_metadata?.role === 'admin';
-        await renderAuthUI(); // sudah memanggil loadDestinationsFromDB() di dalamnya
-        await initWishlist();
-    } else {
-        renderLoginBtn();
-        await loadDestinationsFromDB(); // ← TAMBAHKAN INI
-    }
+  const { data: { session } } = await supabaseClient.auth.getSession();
+  if (session?.user) {
+    currentUser = session.user;
+    isAdmin     = currentUser.email === ADMIN_EMAIL || currentUser.user_metadata?.role === 'admin';
+    await renderAuthUI();
+    await initWishlist();
+  } else {
+    renderLoginBtn();
+    await loadDestinationsFromDB();
+  }
 }
 
 /* ── Render auth UI untuk user yang login ── */
@@ -542,33 +529,31 @@ function showAdminControls() {
   document.querySelectorAll('.admin-only').forEach(el => el.style.display = '');
 }
 
-/* ══════════════════════════════════════ ✅ FIX UTAMA: LOGOUT HANDLER ══════════════════════════════════════ */
-document.body.addEventListener('click', (e) => {
+/* ══════════════════════════════════════ LOGOUT HANDLER ══════════════════════════════════════ */
+document.body.addEventListener('click', async (e) => {
   if (!e.target.closest('#btnLogout')) return;
 
   // Tutup semua modal
   document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
 
-  // ✅ FIX: Bersihkan localStorage DULU, LALU redirect — TIDAK menunggu signOut()
-  // signOut() dijalankan fire-and-forget di background agar tidak memblokir redirect
+  // Bersihkan semua storage
   Object.keys(localStorage).forEach(k => {
     if (k.startsWith('sb-') || k.includes('supabase') || k.includes('kisahanda'))
       localStorage.removeItem(k);
   });
   sessionStorage.clear();
 
-  // Fire and forget — jangan await, biarkan jalan di background
-  supabaseClient.auth.signOut({ scope: 'global' }).catch(() => {});
+  // Sign out dari Supabase
+  try { await supabaseClient.auth.signOut({ scope: 'global' }); } catch (_) {}
 
-  // Langsung reset UI tanpa menunggu network
+  // Reset UI langsung — TANPA redirect ke ?logout=1
   _resetToGuest();
-
   showToast('Berhasil keluar. Sampai jumpa! 👋', '');
 
-  // Redirect setelah toast tampil sebentar
-  setTimeout(() => {
-    location.href = location.pathname + '?logout=1';
-  }, 900);
+  // Bersihkan URL kalau ada query params (tanpa reload halaman)
+  if (location.search) {
+    history.replaceState(null, '', location.pathname);
+  }
 });
 
 /* ── Tutup modal saat klik backdrop ── */
@@ -643,19 +628,13 @@ async function loadDestinationsFromDB() {
 /* ── Re-check auth saat kembali ke tab ── */
 document.addEventListener('visibilitychange', async () => {
   if (document.visibilityState !== 'visible') return;
-  if (localStorage.getItem('kisahanda_logout')) {
-    localStorage.removeItem('kisahanda_logout');
-    try { await supabaseClient.auth.signOut({ scope: 'local' }); } catch (_) {}
-    _resetToGuest();
-    return;
-  }
+  // Hapus flag logout lama kalau masih ada
+  localStorage.removeItem('kisahanda_logout');
   const { data: { session } } = await supabaseClient.auth.getSession();
   if (!session && currentUser) {
     _resetToGuest();
-    return;
   }
-  _loadingDestinations = false;   // ← TAMBAHKAN INI
-  await loadDestinationsFromDB();
+  // Tidak perlu reload destinations — sudah ada di DOM
 });
 
 /* ══════════════════════════════════════ AUTH MODAL ══════════════════════════════════════ */
