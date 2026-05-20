@@ -1,0 +1,364 @@
+/* ══════════════════════════════════════════════════════════
+   Blog-responsive.css — Kisah Anda · Blog Page
+   Tambahkan <link rel="stylesheet" href="Blog-responsive.css" />
+   SETELAH Blog.css di <head>
+   ══════════════════════════════════════════════════════════ */
+
+/* ══════════════════════════════════════════════════════════
+   ── MOBILE NAV DRAWER ──
+   Panel slide-down link navigasi untuk layar ≤ 768px
+   ══════════════════════════════════════════════════════════ */
+.mobile-nav-drawer {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 190;
+    background: rgba(26, 44, 48, 0.97); /* gelap sesuai palet blog */
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    padding-top: 76px;
+    padding-bottom: 1.5rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    border-radius: 0 0 20px 20px;
+    transform: translateY(-100%);
+    opacity: 0;
+    transition:
+        transform 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 0.28s ease;
+    pointer-events: none;
+}
+
+.mobile-nav-drawer.is-open {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.mobile-nav-drawer ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.mobile-nav-drawer ul li {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.mobile-nav-drawer ul li:last-child {
+    border-bottom: none;
+}
+
+.mobile-nav-drawer ul li a {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.85);
+    font-family: "League Spartan", sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    transition: color 0.18s, background 0.18s;
+}
+
+.mobile-nav-drawer ul li a:active,
+.mobile-nav-drawer ul li a:hover {
+    color: var(--teal);
+    background: rgba(117, 169, 179, 0.1);
+}
+
+.mobile-nav-drawer ul li a.active-link {
+    color: var(--teal);
+}
+
+.mobile-nav-drawer ul li a.active-link::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--teal);
+    flex-shrink: 0;
+}
+
+/* Overlay gelap di belakang drawer */
+.mobile-nav-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 185;
+    background: rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.mobile-nav-overlay.is-open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Aktifkan hanya di mobile */
+@media (max-width: 768px) {
+    .mobile-nav-drawer  { display: block; }
+    .mobile-nav-overlay { display: block; }
+}
+
+/* ══════════════════════════════════════════════════════════
+   ── BREAKPOINT: TABLET (≤ 1024px) ──
+   ══════════════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+    .nav { padding: 1.2rem 1.5rem; }
+    .nav-links { gap: 1.2rem; }
+    .nav-links a { font-size: 13px; }
+
+    .blog-hero { height: 55vh; }
+
+    .blog-filter { padding: 2rem 1.5rem 0.75rem; }
+    .blog-grid   { padding: 1.5rem 1.5rem 4rem; }
+
+    .grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+    }
+
+    .footer-container { gap: 28px; }
+}
+
+/* ══════════════════════════════════════════════════════════
+   ── BREAKPOINT: TABLET KECIL / MOBILE BESAR (≤ 768px) ──
+   ══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+    /* ── NAV ── */
+    .nav {
+        padding: 1rem 1.2rem;
+        background: rgba(26, 44, 48, 0.85);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+    }
+    .nav-links    { display: none; }
+    .nav-logo-img { width: 40px; height: 40px; }
+    .nav-right    { gap: 0.8rem; }
+
+    /* Auth button lebih compact */
+    .nav-auth-btn { padding: 6px 12px; font-size: 12px; }
+    .nav-user-name { max-width: 70px; }
+
+    /* ── ADMIN INFO BAR ── */
+    .admin-info-bar {
+        font-size: 11px;
+        padding: 8px 1rem;
+        margin-top: 72px;
+        text-align: left;
+        line-height: 1.5;
+    }
+
+    /* ── HERO ── */
+    .blog-hero {
+        height: 50vh;
+        padding-top: 72px;
+    }
+    .hero-content h1 {
+        font-size: clamp(30px, 9vw, 48px);
+        margin-bottom: 0.75rem;
+    }
+    .hero-content p {
+        font-size: 13px;
+        max-width: 300px;
+    }
+
+    /* ── FILTER ── */
+    .blog-filter {
+        padding: 1.5rem 1rem 0.5rem;
+    }
+    .blog-filter .container {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding-bottom: 6px;
+    }
+    .blog-filter .container::-webkit-scrollbar { display: none; }
+    .filter-btn {
+        flex-shrink: 0;
+        padding: 7px 18px;
+        font-size: 12px;
+    }
+
+    /* ── BLOG GRID ── */
+    .blog-grid {
+        padding: 1.25rem 1rem 3rem;
+    }
+    .grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    /* Card image sedikit lebih pendek di mobile */
+    .card-img img { height: 185px; }
+
+    /* Admin actions — selalu tampil di touch (tidak butuh hover) */
+    .card-admin-actions { opacity: 1; }
+
+    /* ── ADMIN FAB ── */
+    .admin-fab {
+        bottom: 20px;
+        right: 16px;
+    }
+    .fab-btn {
+        padding: 11px 18px;
+        font-size: 13px;
+    }
+
+    /* ── BLOG MODAL ── */
+    .blog-modal-overlay { padding: 12px; }
+    .blog-modal {
+        border-radius: 14px;
+        max-height: 95vh;
+    }
+    .modal-header { padding: 18px 18px 0; }
+    .modal-header h2 { font-size: 17px; }
+    .modal-body { padding: 16px 18px 20px; gap: 12px; }
+    .modal-row  { grid-template-columns: 1fr; }
+    .modal-footer { padding: 0 18px 18px; }
+
+    /* ── TOAST ── */
+    .toast-blog {
+        bottom: 20px;
+        right: 16px;
+        left: 16px;
+        text-align: center;
+    }
+
+    /* ── FOOTER ── */
+    .footer { padding: 2.5rem 1.5rem 0; }
+    .footer-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding-bottom: 1.5rem;
+    }
+    .footer-brand h3 { font-size: 1.2rem; }
+
+    /* ── MENU OVERLAY — mobile ── */
+    .menu {
+        padding: 2rem 1.5rem;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .menu-col-links {
+        position: relative;
+        top: auto; left: auto;
+        transform: none;
+        margin-bottom: 2rem;
+    }
+    .menu-col-info {
+        align-items: center;
+        text-align: center;
+        margin-top: 1.5rem;
+    }
+    .menu-brand { top: 1.5rem; left: 1.5rem; }
+    .menu-logo-img { width: 36px; height: 36px; }
+    .menu-brand-name { font-size: 17px; }
+    .block-btn { width: 230px; font-size: 22px; padding: 12px 30px; }
+}
+
+/* ══════════════════════════════════════════════════════════
+   ── BREAKPOINT: MOBILE KECIL (≤ 480px) ──
+   ══════════════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+
+    /* ── NAV ── */
+    .nav { padding: 0.9rem 1rem; }
+    .nav-logo-img { width: 36px; height: 36px; }
+    .nav-right { gap: 0.6rem; }
+    .nav-auth-btn { padding: 5px 10px; font-size: 11px; }
+
+    /* ── HERO ── */
+    .blog-hero { height: 45vh; padding-top: 68px; }
+    .hero-content h1 { font-size: clamp(26px, 8.5vw, 40px); }
+    .hero-content p  { font-size: 12px; max-width: 260px; }
+
+    /* ── FILTER ── */
+    .blog-filter { padding: 1.2rem 0.8rem 0.4rem; }
+    .filter-btn  { padding: 6px 14px; font-size: 11px; }
+
+    /* ── BLOG GRID ── */
+    .blog-grid { padding: 1rem 0.8rem 2.5rem; }
+    .card-img img { height: 170px; }
+    .card-content { padding: 16px 16px 18px; }
+    .card-content h3 { font-size: 15px; }
+    .card-content p  { font-size: 12px; }
+
+    /* ── ADMIN FAB ── */
+    .admin-fab { bottom: 16px; right: 12px; }
+    .fab-btn   { padding: 10px 16px; font-size: 12px; border-radius: 22px; }
+
+    /* ── MODAL ── */
+    .modal-header h2 { font-size: 16px; }
+    .modal-field input,
+    .modal-field select,
+    .modal-field textarea { font-size: 13px; padding: 9px 12px; }
+    .modal-field textarea.content-area { min-height: 160px; }
+    .btn-save, .btn-cancel { padding: 10px 18px; font-size: 13px; }
+
+    /* ── FOOTER ── */
+    .footer { padding: 2rem 1rem 0; }
+    .footer-brand h3  { font-size: 1.1rem; }
+    .footer-links h4,
+    .footer-contact h4 { font-size: 13px; }
+
+    /* ── MENU ── */
+    .block-btn { width: 200px; font-size: 20px; padding: 11px 24px; }
+    .menu-col-info h3 { font-size: 14px; }
+    .menu-col-info h6 { font-size: 11px; }
+}
+
+/* ══════════════════════════════════════════════════════════
+   ── BREAKPOINT: SANGAT KECIL (≤ 375px) ──
+   ══════════════════════════════════════════════════════════ */
+@media (max-width: 375px) {
+    .blog-hero { height: 40vh; }
+    .hero-content h1 { font-size: clamp(22px, 8vw, 34px); }
+    .hero-content p  { font-size: 11px; max-width: 220px; }
+    .card-img img    { height: 155px; }
+    .block-btn       { width: 180px; font-size: 18px; }
+}
+
+/* ══════════════════════════════════════════════════════════
+   ── SAFE AREA — notch & home indicator ──
+   ══════════════════════════════════════════════════════════ */
+@supports (padding: env(safe-area-inset-bottom)) {
+    .footer-bottom {
+        padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
+    }
+    .admin-fab {
+        bottom: calc(32px + env(safe-area-inset-bottom));
+    }
+    .nav {
+        padding-top: calc(1rem + env(safe-area-inset-top));
+    }
+}
+
+/* ══════════════════════════════════════════════════════════
+   ── TOUCH — hapus hover ghost di layar sentuh ──
+   ══════════════════════════════════════════════════════════ */
+@media (hover: none) and (pointer: coarse) {
+    .blog-card:hover {
+        transform: none;
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
+    }
+    .filter-btn:hover:not(.active) {
+        background: #fcfef1;
+        color: #999;
+        border-color: #e0d9cb;
+        box-shadow: none;
+    }
+    .fab-btn:hover {
+        transform: none;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    }
+}
