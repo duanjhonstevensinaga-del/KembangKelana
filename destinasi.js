@@ -26,23 +26,37 @@ function escapeHTML(str = '') {
 }
 
 /* ══════════════════════════════════════ UPLOAD FOTO KE SUPABASE STORAGE ══════════════════════════════════════ */
+// Attach file input listener via JS (lebih reliable dari onchange di HTML)
+document.addEventListener('DOMContentLoaded', () => {
+  const fileInput = document.getElementById('dImgFile');
+  if (fileInput) {
+    fileInput.addEventListener('change', function() {
+      previewDestImg(this);
+    });
+  }
+});
+
 function previewDestImg(input) {
   const file = input.files[0];
   if (!file) return;
   const preview = document.getElementById('dImgPreview');
   const wrap    = document.getElementById('dImgPreviewWrap');
-  const label   = document.getElementById('dImgLabel');
+  const btnText = document.getElementById('dImgBtnText');
   preview.src = URL.createObjectURL(file);
   wrap.style.display  = 'flex';
-  label.textContent   = '📷 Ganti Foto';
+  if (btnText) btnText.textContent = 'Ganti Foto';
 }
 
 function clearDestImg() {
-  document.getElementById('dImg').value         = '';
-  document.getElementById('dImgFile').value     = '';
-  document.getElementById('dImgPreview').src    = '';
-  document.getElementById('dImgPreviewWrap').style.display = 'none';
-  document.getElementById('dImgLabel').textContent = '📷 Pilih Foto';
+  const fileInput = document.getElementById('dImgFile');
+  const preview   = document.getElementById('dImgPreview');
+  const wrap      = document.getElementById('dImgPreviewWrap');
+  const btnText   = document.getElementById('dImgBtnText');
+  if (fileInput) fileInput.value = '';
+  document.getElementById('dImg').value = '';
+  if (preview)  { preview.src = ''; }
+  if (wrap)     { wrap.style.display = 'none'; }
+  if (btnText)  { btnText.textContent = 'Pilih Foto'; }
 }
 
 async function uploadDestImg(file) {
@@ -766,9 +780,10 @@ function setDestModal({ mode, category = '', oldId='', name='', slug='', cost=''
   document.getElementById('dImg').value           = img;
   document.getElementById('dImgFile').value = '';
   if (img) {
-    document.getElementById('dImgPreview').src           = img;
+    document.getElementById('dImgPreview').src              = img;
     document.getElementById('dImgPreviewWrap').style.display = 'flex';
-    document.getElementById('dImgLabel').textContent     = '📷 Ganti Foto';
+    const btnText = document.getElementById('dImgBtnText');
+    if (btnText) btnText.textContent = 'Ganti Foto';
   } else { clearDestImg(); }
   if (document.getElementById('dDesc'))     document.getElementById('dDesc').value     = desc;
   if (document.getElementById('dTagline'))  document.getElementById('dTagline').value  = tagline;
