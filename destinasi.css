@@ -783,6 +783,46 @@ body {
 .toast-dest.error   { background: #c0392b; }
 
 /* ══════════════════════════════════════
+   MOBILE BOTTOM NAV
+══════════════════════════════════════ */
+.mobile-bottom-nav {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 300;
+    background: #fff;
+    border-top: 1px solid #ece8de;
+    padding: 8px 0 env(safe-area-inset-bottom, 8px);
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+    justify-content: space-around;
+    align-items: center;
+}
+.mbn-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 4px 12px;
+    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #888;
+    font-family: 'DM Sans', sans-serif;
+    transition: color 0.2s;
+    min-width: 56px;
+}
+.mbn-item span:last-child {
+    font-size: 10px;
+    font-weight: 600;
+}
+.mbn-icon { font-size: 18px; line-height: 1; }
+.mbn-item.active { color: #75a9b3; }
+.mbn-item svg { width: 20px; height: 20px; }
+
+/* ══════════════════════════════════════
    RESPONSIVE
 ══════════════════════════════════════ */
 @media (max-width: 560px) {
@@ -791,6 +831,14 @@ body {
     .top-nav-center { display: none; }
     .modal-row { flex-direction: column; }
     .modal-box { padding: 20px 16px 18px; }
+    .mobile-bottom-nav { display: flex; }
+    .page-content { padding-bottom: 90px; }
+    .toast-dest { bottom: 80px; }
+    .filter-bar { top: 57px; }
+    .section-header-right { gap: 8px; }
+    .section-card { padding: 16px 14px 12px; border-radius: 16px; }
+    .top-nav { padding: 12px 16px; }
+    .back-btn span { display: none; }
 }
 /* ── Upload Foto Destinasi ── */
 .img-upload-wrap { display: flex; flex-direction: column; gap: 10px; }

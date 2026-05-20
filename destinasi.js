@@ -454,11 +454,13 @@ function _resetToGuest() {
   wishlistIds = [];
   const bar = document.getElementById('authBar');
   if (bar) bar.style.display = 'none';
+  // Sembunyikan semua admin-only element
   document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
+  // Sembunyikan admin-card-actions di kartu
+  document.querySelectorAll('.admin-card-actions').forEach(el => el.remove());
   applyWishlistUI();
   renderLoginBtn();
-  // Re-render kartu agar tombol edit/hapus admin ikut hilang
-  _loadingDestinations = false; // ← tambahkan ini
+  _loadingDestinations = false;
   loadDestinationsFromDB();
 }
 
@@ -619,6 +621,9 @@ async function loadDestinationsFromDB() {
 
   // Tampilkan admin controls kalau sudah login sebagai admin
   if (isAdmin) showAdminControls();
+
+  // Reset guard agar bisa dipanggil lagi nanti (misal setelah simpan destinasi)
+  _loadingDestinations = false;
 }
 
 /* ── Re-check auth saat kembali ke tab ── */
@@ -778,7 +783,12 @@ function setDestModal({ mode, category = '', oldId='', name='', slug='', cost=''
   if (msg) { msg.textContent = ''; msg.className = 'modal-msg'; }
 }
 
-function closeDestModal() { document.getElementById('destModal')?.classList.remove('open'); }
+function closeDestModal() {
+  document.getElementById('destModal')?.classList.remove('open');
+  // Pastikan tombol simpan selalu kembali aktif saat modal ditutup
+  const btn = document.getElementById('btnSaveDest');
+  if (btn) { btn.disabled = false; btn.textContent = 'Simpan Destinasi'; }
+}
 
 async function saveDest() {
   if (!isAdmin) { showToast('Akses admin diperlukan.', 'error'); return; }
@@ -853,24 +863,9 @@ async function saveDest() {
   closeDestModal();
   showToast(mode === 'add' ? 'Destinasi berhasil ditambahkan! ✅' : 'Destinasi berhasil diperbarui! ✅', 'success');
 
-  if (mode === 'add') {
-    injectCard({ id: slug, name, category, cost, img: imgUrl });
-  } else {
-    const card = document.querySelector(`.dest-card[data-id="${oldId}"]`);
-    if (card) {
-      if (slug !== oldId) card.dataset.id = slug;
-      card.dataset.cost     = cost;
-      card.dataset.category = category;
-      const labelEl = card.querySelector('.dest-label');
-      const costEl  = card.querySelector('.dest-cost');
-      const imgEl   = card.querySelector('img');
-      if (labelEl) labelEl.textContent = name;
-      if (costEl)  costEl.textContent  = cost ? 'Rp ' + cost.toLocaleString('id-ID') : 'Gratis';
-      if (imgEl && imgUrl) imgEl.src = imgUrl;
-    }
-  }
-}
-
+  // Reload ulang dari DB agar data sinkron dan tombol bisa dipakai lagi
+  _loadingDestinations = false;
+  await loadDestinationsFromDB();}
 /* ══════════════════════════════════════ DELETE CARD ══════════════════════════════════════ */
 async function deleteCard(e, id) {
   e.stopPropagation();
@@ -945,6 +940,27 @@ async function loadLatestReviewsForIndex() {
   }
 }
 loadLatestReviewsForIndex();
+
+/* ══════════════════════════════════════ MOBILE BOTTOM NAV TOGGLE ══════════════════════════════════════ */
+function mbnToggleRange(type) {
+  const hargaPanel = document.getElementById('globalRangePanel');
+  const jarakPanel = document.getElementById('globalJarakPanel');
+  const mbnHarga   = document.getElementById('mbnRangeHarga');
+  const mbnJarak   = document.getElementById('mbnRangeJarak');
+  if (type === 'harga') {
+    const isOpen = hargaPanel.classList.contains('open');
+    jarakPanel.classList.remove('open');
+    mbnJarak?.classList.remove('active');
+    hargaPanel.classList.toggle('open', !isOpen);
+    mbnHarga?.classList.toggle('active', !isOpen);
+  } else {
+    const isOpen = jarakPanel.classList.contains('open');
+    hargaPanel.classList.remove('open');
+    mbnHarga?.classList.remove('active');
+    jarakPanel.classList.toggle('open', !isOpen);
+    mbnJarak?.classList.toggle('active', !isOpen);
+  }
+}
 
 /* ══════════════════════════════════════ INIT ══════════════════════════════════════ */
 checkAuth();

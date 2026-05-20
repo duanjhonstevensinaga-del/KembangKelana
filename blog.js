@@ -35,6 +35,12 @@
    SUPABASE — gunakan instance dari auth-modal.js (sbAuth)
    Jika auth-modal.js belum load, buat instance sendiri sebagai fallback
    ══════════════════════════════════════ */
+
+// Aktifkan SplitText plugin — wajib ada seperti di script.js index
+if (typeof gsap !== 'undefined' && typeof SplitText !== 'undefined') {
+  gsap.registerPlugin(SplitText);
+}
+
 const SUPABASE_URL_BLOG      = "https://fvyjlwwurapxbddakdpq.supabase.co";
 const SUPABASE_ANON_KEY_BLOG = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2eWpsd3d1cmFweGJkZGFrZHBxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNjkxMjUsImV4cCI6MjA5NDY0NTEyNX0.76JVhpxtplY4B0dY7VhBmh2XP_Mzooi84yPA6-vNtb0";
 
