@@ -347,7 +347,6 @@ async function deleteBlogPost(id, title) {
    ══════════════════════════════════════ */
 function initMenu() {
   if (typeof gsap === 'undefined') return;
-  if (typeof SplitText !== 'undefined') gsap.registerPlugin(SplitText);
 
   const navToggle        = document.getElementById('navToggle');
   const menu             = document.getElementById('menu');
@@ -362,7 +361,6 @@ function initMenu() {
   if (!navToggle || !menu) return;
 
   let isOpen = false, isAnimating = false;
-  let brandSplit = null;
 
   const W = 1131, H = 861, CX = W / 2;
   const midY   = H * 0.20;
@@ -371,22 +369,13 @@ function initMenu() {
   const FULL   = `M0,${H} L${W},${H} L${W},${midY} Q${CX},${midY} 0,${midY} Z`;
   const CBULGE = `M0,${H} L${W},${H} L${W},${midY-50} Q${CX},${H-100} 0,${midY-50} Z`;
 
-  if (menuBg) gsap.set(menuBg, { attr: { d: HIDDEN } });
-
-  // Build SplitText fresh setiap buka (revert dulu kalau sudah ada)
-  function buildSplit() {
-    if (typeof SplitText === 'undefined' || !menuBrandName) return null;
-    if (brandSplit) { brandSplit.revert(); brandSplit = null; }
-    brandSplit = new SplitText(menuBrandName, { type: 'chars', charsClass: 'kk-char' });
-    gsap.set(brandSplit.chars, { opacity: 0, x: 50 });
-    return brandSplit;
-  }
-
-  // Set initial states
+  // Set semua initial state via GSAP — CSS tidak set opacity sama sekali
+  if (menuBg)           gsap.set(menuBg,           { attr: { d: HIDDEN } });
   if (menuBrandLogo)    gsap.set(menuBrandLogo,    { opacity: 0, scale: 0.8 });
   if (menuBrandLogoBox) gsap.set(menuBrandLogoBox, { opacity: 0, scale: 0.85, y: 16 });
-  if (menuInfoBox)      gsap.set(menuInfoBox,      { opacity: 0, y: 20, scale: 0.97 });
   if (menuBrandTextBox) gsap.set(menuBrandTextBox, { opacity: 0, y: 14, scale: 0.96 });
+  if (menuBrandName)    gsap.set(menuBrandName,    { opacity: 0, y: 20 });
+  if (menuInfoBox)      gsap.set(menuInfoBox,      { opacity: 0, y: 20, scale: 0.97 });
   gsap.set(menuInfoItems, { opacity: 0, y: 50 });
 
   navToggle.addEventListener('click', () => {
@@ -400,43 +389,41 @@ function initMenu() {
   function openMenu() {
     menu.classList.add('is-open');
     document.body.style.overflow = 'hidden';
-    const split = buildSplit();
     const tl = gsap.timeline({ onComplete: () => { isAnimating = false; } });
     tl.to(menuBg, { duration: 0.4, attr: { d: BULGE }, ease: 'power4.in' })
       .to(menuBg, { duration: 0.4, attr: { d: FULL  }, ease: 'power4.out' });
     if (menuBrandLogoBox)
-      tl.to(menuBrandLogoBox, { opacity: 1, scale: 1, y: 0, duration: 0.45, ease: 'back.out(1.7)' }, '-=0.25');
+      tl.to(menuBrandLogoBox, { opacity: 1, scale: 1, y: 0,    duration: 0.45, ease: 'back.out(1.7)' }, '-=0.25');
     if (menuBrandLogo)
-      tl.to(menuBrandLogo,    { opacity: 1, scale: 1, duration: 0.4, ease: 'back.out(1.8)' }, '-=0.35');
+      tl.to(menuBrandLogo,    { opacity: 1, scale: 1,          duration: 0.4,  ease: 'back.out(1.8)' }, '-=0.35');
     if (menuBrandTextBox)
-      tl.to(menuBrandTextBox, { opacity: 1, y: 0, scale: 1, duration: 0.45, ease: 'back.out(1.6)' }, '-=0.3');
-    if (split)
-      tl.to(split.chars, { x: 0, opacity: 1, duration: 0.8, stagger: 0.03, ease: 'elastic.out(1, 0.5)' }, '-=0.35');
+      tl.to(menuBrandTextBox, { opacity: 1, y: 0, scale: 1,    duration: 0.45, ease: 'back.out(1.6)' }, '-=0.3');
+    if (menuBrandName)
+      tl.to(menuBrandName,    { opacity: 1, y: 0,              duration: 0.5,  ease: 'back.out(1.4)' }, '-=0.3');
     if (menuInfoBox)
-      tl.to(menuInfoBox, { opacity: 1, y: 0, scale: 1, duration: 0.45, ease: 'back.out(1.6)' }, '-=0.5');
+      tl.to(menuInfoBox,      { opacity: 1, y: 0, scale: 1,    duration: 0.45, ease: 'back.out(1.6)' }, '-=0.45');
     tl.to([...menuInfoItems], { opacity: 1, y: 0, duration: 0.5, stagger: 0.05 }, '-=0.4');
   }
 
   function closeMenu() {
     gsap.set(menuBg, { attr: { d: FULL } });
-    const split = brandSplit;
     const tl = gsap.timeline({ onComplete: () => {
       menu.classList.remove('is-open');
       document.body.style.overflow = '';
       isAnimating = false;
-      if (split) { split.revert(); brandSplit = null; }
       if (menuBrandLogo)    gsap.set(menuBrandLogo,    { opacity: 0, scale: 0.8 });
       if (menuBrandLogoBox) gsap.set(menuBrandLogoBox, { opacity: 0, scale: 0.85, y: 16 });
-      if (menuInfoBox)      gsap.set(menuInfoBox,      { opacity: 0, y: 20, scale: 0.97 });
       if (menuBrandTextBox) gsap.set(menuBrandTextBox, { opacity: 0, y: 14, scale: 0.96 });
+      if (menuBrandName)    gsap.set(menuBrandName,    { opacity: 0, y: 20 });
+      if (menuInfoBox)      gsap.set(menuInfoBox,      { opacity: 0, y: 20, scale: 0.97 });
       gsap.set(menuInfoItems, { opacity: 0, y: 50 });
     }});
     const fadeTargets = [
       ...(menuBrandLogoBox ? [menuBrandLogoBox] : []),
       ...(menuBrandLogo    ? [menuBrandLogo]    : []),
       ...(menuBrandTextBox ? [menuBrandTextBox] : []),
+      ...(menuBrandName    ? [menuBrandName]    : []),
       ...(menuInfoBox      ? [menuInfoBox]      : []),
-      ...(split            ? split.chars        : []),
       ...menuInfoItems
     ];
     tl.to(fadeTargets, { opacity: 0, duration: 0.18, stagger: 0.015 })

@@ -134,7 +134,7 @@
       padding: 0.75rem 2.2rem 0.9rem;
       box-shadow: 0 8px 40px rgba(0,0,0,0.16),
                   inset 0 1px 0 rgba(255,255,255,0.15);
-      overflow: hidden;
+      /* HAPUS overflow:hidden — biar chars SplitText bisa keluar masuk */
     }
     .menu-kk-brand-name {
       font-family: 'Playfair Display', serif !important;
@@ -143,12 +143,11 @@
       color: #fff !important;
       letter-spacing: 2px !important;
       text-align: center !important;
-      line-height: 1 !important;
+      line-height: 1.2 !important;
       display: block !important;
-      opacity: 0;
-      transform: translateY(14px);
-      will-change: opacity, transform;
+      white-space: nowrap;
       text-shadow: none !important;
+      /* Jangan set opacity di CSS — GSAP yang handle sepenuhnya */
     }
     .char { display: inline-block; }
     .kk-char { display: inline-block; }
