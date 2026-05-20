@@ -354,7 +354,7 @@ function initMenu() {
   const menuInfoItems    = document.querySelectorAll('.menu-col-info p, .menu-col-info h3, .menu-col-info h6');
   const menuBrandLogo    = document.querySelector('.menu-brand-logo');
   const menuBrandLogoBox = document.querySelector('.menu-brand-logo-box');
-  const menuBrandName    = document.querySelector('.menu-kk-brand-name');
+  const menuBrandName    = document.querySelector('.menu-brand-name');
   const menuInfoBox      = document.querySelector('.menu-col-info-box');
   const menuBrandTextBox = document.querySelector('.menu-brand-text-box');
 
@@ -369,12 +369,17 @@ function initMenu() {
   const FULL   = `M0,${H} L${W},${H} L${W},${midY} Q${CX},${midY} 0,${midY} Z`;
   const CBULGE = `M0,${H} L${W},${H} L${W},${midY-50} Q${CX},${H-100} 0,${midY-50} Z`;
 
-  // Set semua initial state via GSAP — CSS tidak set opacity sama sekali
+  // SplitText per karakter — identik dengan script.js di index
+  const brandSplit = (menuBrandName && typeof SplitText !== 'undefined')
+    ? new SplitText(menuBrandName, { type: 'chars', charsClass: 'char' })
+    : null;
+
+  // Set semua initial state via GSAP
   if (menuBg)           gsap.set(menuBg,           { attr: { d: HIDDEN } });
   if (menuBrandLogo)    gsap.set(menuBrandLogo,    { opacity: 0, scale: 0.8 });
   if (menuBrandLogoBox) gsap.set(menuBrandLogoBox, { opacity: 0, scale: 0.85, y: 16 });
   if (menuBrandTextBox) gsap.set(menuBrandTextBox, { opacity: 0, y: 14, scale: 0.96 });
-  if (menuBrandName)    gsap.set(menuBrandName,    { opacity: 0, y: 20 });
+  if (brandSplit)       gsap.set(brandSplit.chars, { opacity: 0, x: 50 });
   if (menuInfoBox)      gsap.set(menuInfoBox,      { opacity: 0, y: 20, scale: 0.97 });
   gsap.set(menuInfoItems, { opacity: 0, y: 50 });
 
@@ -398,10 +403,10 @@ function initMenu() {
       tl.to(menuBrandLogo,    { opacity: 1, scale: 1,          duration: 0.4,  ease: 'back.out(1.8)' }, '-=0.35');
     if (menuBrandTextBox)
       tl.to(menuBrandTextBox, { opacity: 1, y: 0, scale: 1,    duration: 0.45, ease: 'back.out(1.6)' }, '-=0.3');
-    if (menuBrandName)
-      tl.to(menuBrandName,    { opacity: 1, y: 0,              duration: 0.5,  ease: 'back.out(1.4)' }, '-=0.3');
+    if (brandSplit)
+      tl.to(brandSplit.chars, { x: 0, opacity: 1, duration: 0.8, stagger: 0.03, ease: 'elastic.out(1, 0.5)' }, '-=0.35');
     if (menuInfoBox)
-      tl.to(menuInfoBox,      { opacity: 1, y: 0, scale: 1,    duration: 0.45, ease: 'back.out(1.6)' }, '-=0.45');
+      tl.to(menuInfoBox,      { opacity: 1, y: 0, scale: 1,    duration: 0.45, ease: 'back.out(1.6)' }, '-=0.5');
     tl.to([...menuInfoItems], { opacity: 1, y: 0, duration: 0.5, stagger: 0.05 }, '-=0.4');
   }
 
@@ -414,7 +419,7 @@ function initMenu() {
       if (menuBrandLogo)    gsap.set(menuBrandLogo,    { opacity: 0, scale: 0.8 });
       if (menuBrandLogoBox) gsap.set(menuBrandLogoBox, { opacity: 0, scale: 0.85, y: 16 });
       if (menuBrandTextBox) gsap.set(menuBrandTextBox, { opacity: 0, y: 14, scale: 0.96 });
-      if (menuBrandName)    gsap.set(menuBrandName,    { opacity: 0, y: 20 });
+      if (brandSplit)       gsap.set(brandSplit.chars, { opacity: 0, x: 50 });
       if (menuInfoBox)      gsap.set(menuInfoBox,      { opacity: 0, y: 20, scale: 0.97 });
       gsap.set(menuInfoItems, { opacity: 0, y: 50 });
     }});
@@ -422,7 +427,7 @@ function initMenu() {
       ...(menuBrandLogoBox ? [menuBrandLogoBox] : []),
       ...(menuBrandLogo    ? [menuBrandLogo]    : []),
       ...(menuBrandTextBox ? [menuBrandTextBox] : []),
-      ...(menuBrandName    ? [menuBrandName]    : []),
+      ...(brandSplit       ? brandSplit.chars   : []),
       ...(menuInfoBox      ? [menuInfoBox]      : []),
       ...menuInfoItems
     ];
