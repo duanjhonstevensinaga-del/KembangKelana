@@ -343,31 +343,43 @@ async function deleteBlogPost(id, title) {
 }
 
 /* ══════════════════════════════════════
-   OVERLAY MENU (GSAP)
+   OVERLAY MENU (GSAP) — identik dengan index
    ══════════════════════════════════════ */
 function initMenu() {
-  const navToggle     = document.getElementById('navToggle');
-  const menu          = document.getElementById('menu');
-  const menuBg        = document.getElementById('menu-path');
-  const menuLinks     = document.querySelectorAll('.block-btn');
-  const menuInfoItems = document.querySelectorAll('.menu-col-info p, .menu-col-info h3, .menu-col-info h6');
-  const pickNeeds     = document.querySelector('.pick-needs');
-  const menuBrand     = document.querySelector('.menu-brand');
+  const navToggle        = document.getElementById('navToggle');
+  const menu             = document.getElementById('menu');
+  const menuBg           = document.getElementById('menu-path');
+  const menuInfoItems    = document.querySelectorAll('.menu-col-info p, .menu-col-info h3, .menu-col-info h6');
+  const menuBrandLogo    = document.querySelector('.menu-brand-logo');
+  const menuBrandLogoBox = document.querySelector('.menu-brand-logo-box');
+  const menuBrandName    = document.querySelector('.menu-brand-name');
+  const menuInfoBox      = document.querySelector('.menu-col-info-box');
+  const menuBrandTextBox = document.querySelector('.menu-brand-text-box');
 
   if (!navToggle || !menu || typeof gsap === 'undefined') return;
 
   let isOpen = false, isAnimating = false;
-  const W = 1131, H = 861, CX = W / 2, midY = H * 0.20;
+
+  const W = 1131, H = 861, CX = W / 2;
+  const midY   = H * 0.20;
   const HIDDEN = `M0,${H} L${W},${H} L${W},${H} Q${CX},${H} 0,${H} Z`;
   const BULGE  = `M0,${H} L${W},${H} L${W},${midY+150} Q${CX},50 0,${midY+150} Z`;
   const FULL   = `M0,${H} L${W},${H} L${W},${midY} Q${CX},${midY} 0,${midY} Z`;
   const CBULGE = `M0,${H} L${W},${H} L${W},${midY-50} Q${CX},${H-100} 0,${midY-50} Z`;
 
-  if (menuBg) gsap.set(menuBg, { attr: { d: HIDDEN } });
-  gsap.set(menuLinks, { opacity: 0, y: 20 });
+  gsap.set(menuBg, { attr: { d: HIDDEN } });
+
+  // SplitText per karakter — identik index
+  const brandSplit = (typeof SplitText !== 'undefined' && menuBrandName)
+    ? new SplitText(menuBrandName, { type: 'chars', charsClass: 'char' })
+    : null;
+
+  if (brandSplit)      gsap.set(brandSplit.chars, { opacity: 0, x: 50 });
+  if (menuBrandLogo)    gsap.set(menuBrandLogo,    { opacity: 0, scale: 0.8 });
+  if (menuBrandLogoBox) gsap.set(menuBrandLogoBox, { opacity: 0, scale: 0.85, y: 16 });
+  if (menuInfoBox)      gsap.set(menuInfoBox,      { opacity: 0, y: 20, scale: 0.97 });
+  if (menuBrandTextBox) gsap.set(menuBrandTextBox, { opacity: 0, y: 14, scale: 0.96 });
   gsap.set(menuInfoItems, { opacity: 0, y: 50 });
-  if (pickNeeds) gsap.set(pickNeeds, { opacity: 0, y: 20 });
-  if (menuBrand) gsap.set(menuBrand, { opacity: 0, x: -20 });
 
   navToggle.addEventListener('click', () => {
     if (isAnimating) return;
@@ -382,23 +394,42 @@ function initMenu() {
     document.body.style.overflow = 'hidden';
     const tl = gsap.timeline({ onComplete: () => { isAnimating = false; } });
     tl.to(menuBg, { duration: 0.4, attr: { d: BULGE }, ease: 'power4.in' })
-      .to(menuBg, { duration: 0.4, attr: { d: FULL  }, ease: 'power4.out' })
-      .to(menuBrand, { opacity: 1, x: 0, duration: 0.4, ease: 'power2.out' }, '-=0.3')
-      .to([pickNeeds, ...menuInfoItems], { opacity: 1, y: 0, duration: 0.5, stagger: 0.05 }, '-=0.35')
-      .to(menuLinks, { opacity: 1, y: 0, duration: 0.5, stagger: 0.08, ease: 'back.out(1.4)' }, '-=0.4');
+      .to(menuBg, { duration: 0.4, attr: { d: FULL  }, ease: 'power4.out' });
+    if (menuBrandLogoBox)
+      tl.to(menuBrandLogoBox, { opacity: 1, scale: 1, y: 0, duration: 0.45, ease: 'back.out(1.7)' }, '-=0.25');
+    if (menuBrandLogo)
+      tl.to(menuBrandLogo,    { opacity: 1, scale: 1, duration: 0.4,  ease: 'back.out(1.8)' }, '-=0.35');
+    if (menuBrandTextBox)
+      tl.to(menuBrandTextBox, { opacity: 1, y: 0, scale: 1, duration: 0.45, ease: 'back.out(1.6)' }, '-=0.3');
+    if (brandSplit)
+      tl.to(brandSplit.chars, { x: 0, opacity: 1, duration: 0.8, stagger: 0.03, ease: 'elastic.out(1, 0.5)' }, '-=0.35');
+    if (menuInfoBox)
+      tl.to(menuInfoBox,      { opacity: 1, y: 0, scale: 1, duration: 0.45, ease: 'back.out(1.6)' }, '-=0.5');
+    tl.to([...menuInfoItems], { opacity: 1, y: 0, duration: 0.5, stagger: 0.05 }, '-=0.4');
   }
 
   function closeMenu() {
+    gsap.set(menuBg, { attr: { d: FULL } });
     const tl = gsap.timeline({ onComplete: () => {
       menu.classList.remove('is-open');
       document.body.style.overflow = '';
       isAnimating = false;
-      gsap.set(menuLinks, { opacity: 0, y: 20 });
-      if (pickNeeds) gsap.set(pickNeeds, { opacity: 0, y: 20 });
+      if (brandSplit)      gsap.set(brandSplit.chars, { opacity: 0, x: 50 });
+      if (menuBrandLogo)    gsap.set(menuBrandLogo,    { opacity: 0, scale: 0.8 });
+      if (menuBrandLogoBox) gsap.set(menuBrandLogoBox, { opacity: 0, scale: 0.85, y: 16 });
+      if (menuInfoBox)      gsap.set(menuInfoBox,      { opacity: 0, y: 20, scale: 0.97 });
+      if (menuBrandTextBox) gsap.set(menuBrandTextBox, { opacity: 0, y: 14, scale: 0.96 });
       gsap.set(menuInfoItems, { opacity: 0, y: 50 });
-      if (menuBrand) gsap.set(menuBrand, { opacity: 0, x: -20 });
     }});
-    tl.to([pickNeeds, menuInfoItems, menuLinks, menuBrand], { opacity: 0, duration: 0.2, stagger: 0.03 })
+    const fadeTargets = [
+      ...(menuBrandLogoBox ? [menuBrandLogoBox] : []),
+      ...(menuBrandLogo    ? [menuBrandLogo]    : []),
+      ...(menuBrandTextBox ? [menuBrandTextBox] : []),
+      ...(menuInfoBox      ? [menuInfoBox]      : []),
+      ...(brandSplit       ? brandSplit.chars   : []),
+      ...menuInfoItems
+    ];
+    tl.to(fadeTargets, { opacity: 0, duration: 0.18, stagger: 0.015 })
       .to(menuBg, { duration: 0.4, attr: { d: CBULGE }, ease: 'power3.in' })
       .to(menuBg, { duration: 0.4, attr: { d: HIDDEN }, ease: 'power3.out' });
   }
