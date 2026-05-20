@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Test Upload Supabase</title>
+<style>
+  body { font-family: sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; background: #f5f5f5; }
+  h2 { color: #333; }
+  .card { background: #fff; border-radius: 12px; padding: 20px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+  .status { padding: 10px 14px; border-radius: 8px; font-size: 14px; font-weight: 600; margin-top: 10px; }
+  .ok   { background: #e0f5e9; color: #1a7a3c; }
+  .err  { background: #ffe0e0; color: #c0392b; }
+  .info { background: #e8f4f6; color: #2c6b74; }
+  button { padding: 10px 20px; border-radius: 8px; border: none; background: #222; color: #fff; cursor: pointer; font-size: 14px; margin-top: 10px; }
+  button:hover { background: #444; }
+  input[type=file] { display: block; margin-top: 10px; }
+  pre { background: #f0f0f0; padding: 10px; border-radius: 6px; font-size: 12px; overflow-x: auto; white-space: pre-wrap; word-break: break-all; }
+  img#preview { margin-top: 10px; max-width: 100%; border-radius: 8px; display: none; }
+</style>
+</head>
+<body>
+<h2>🔬 Test Upload Foto Supabase</h2>
+<p style="color:#666;font-size:13px;">Buka halaman ini di browser yang sama dengan destinasi.html, login dulu sebagai admin, lalu jalankan test di bawah.</p>
+
+<!-- TEST 1: Auth -->
+<div class="card">
+  <b>1. Cek Status Login</b>
+  <button onclick="testAuth()">Cek Auth</button>
+  <div id="authResult"></div>
+</div>
+
+<!-- TEST 2: Bucket exists -->
+<div class="card">
+  <b>2. Cek Bucket "destinasi-photos"</b>
+  <button onclick="testBucket()">Cek Bucket</button>
+  <div id="bucketResult"></div>
+</div>
+
+<!-- TEST 3: Upload file kecil -->
+<div class="card">
+  <b>3. Test Upload File</b><br>
+  <input type="file" accept="image/*" id="testFile"/>
+  <button onclick="testUpload()">Upload Test</button>
+  <div id="uploadResult"></div>
+  <img id="preview"/>
+</div>
+
+<!-- TEST 4: List files in bucket -->
+<div class="card">
+  <b>4. List File di Bucket</b>
+  <button onclick="testList()">List Files</button>
+  <div id="listResult"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL      = "https://fvyjlwwurapxbddakdpq.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2eWpsd3d1cmFweGJkZGFrZHBxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNjkxMjUsImV4cCI6MjA5NDY0NTEyNX0.76JVhpxtplY4B0dY7VhBmh2XP_Mzooi84yPA6-vNtb0";
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+function show(id, msg, type='info') {
+  document.getElementById(id).innerHTML = `<div class="status ${type}">${msg}</div>`;
+}
+function showPre(id, obj, type='info') {
+  document.getElementById(id).innerHTML = `<div class="status ${type}"><pre>${JSON.stringify(obj, null, 2)}</pre></div>`;
+}
+
+async function testAuth() {
+  const { data: { session }, error } = await sb.auth.getSession();
+  if (error) { show('authResult', '❌ Error: ' + error.message, 'err'); return; }
+  if (!session) { show('authResult', '❌ Tidak ada session. Silakan login dulu di destinasi.html', 'err'); return; }
+  const email = session.user.email;
+  const isAdmin = email === 'admin@kisahanda.co' || session.user.user_metadata?.role === 'admin';
+  show('authResult', `✅ Login sebagai: <b>${email}</b><br>Admin: <b>${isAdmin ? 'Ya ✅' : 'Bukan admin ❌'}</b>`, 'ok');
+}
+
+async function testBucket() {
+  const { data, error } = await sb.storage.listBuckets();
+  if (error) { showPre('bucketResult', { error: error.message }, 'err'); return; }
+  const found = data?.find(b => b.name === 'destinasi-photos');
+  if (found) {
+    showPre('bucketResult', { found: true, bucket: found, allBuckets: data.map(b=>b.name) }, 'ok');
+  } else {
+    showPre('bucketResult', { found: false, error: 'Bucket "destinasi-photos" TIDAK ADA!', allBuckets: data.map(b=>b.name) }, 'err');
+  }
+}
+
+async function testUpload() {
+  const fileInput = document.getElementById('testFile');
+  const file = fileInput.files[0];
+  if (!file) { show('uploadResult', '⚠️ Pilih file dulu!', 'info'); return; }
+  show('uploadResult', '⏳ Mengupload...', 'info');
+  
+  const ext = file.name.split('.').pop();
+  const fileName = `test-${Date.now()}.${ext}`;
+  
+  const { data, error } = await sb.storage
+    .from('destinasi-photos')
+    .upload(fileName, file, { upsert: true, contentType: file.type });
+  
+  if (error) {
+    showPre('uploadResult', {
+      success: false,
+      errorMessage: error.message,
+      errorDetails: error,
+      diagnosis: getDiagnosis(error.message)
+    }, 'err');
+    return;
+  }
+  
+  const { data: { publicUrl } } = sb.storage.from('destinasi-photos').getPublicUrl(fileName);
+  document.getElementById('preview').src = publicUrl;
+  document.getElementById('preview').style.display = 'block';
+  showPre('uploadResult', { success: true, fileName, publicUrl }, 'ok');
+}
+
+async function testList() {
+  const { data, error } = await sb.storage.from('destinasi-photos').list('', { limit: 10 });
+  if (error) { showPre('listResult', { error: error.message, diagnosis: getDiagnosis(error.message) }, 'err'); return; }
+  showPre('listResult', { totalFiles: data?.length, files: data?.map(f => f.name) }, 'ok');
+}
+
+function getDiagnosis(msg) {
+  if (!msg) return 'Tidak ada pesan error';
+  if (msg.includes('not found') || msg.includes('does not exist')) 
+    return '🔴 BUCKET TIDAK ADA → Buat bucket "destinasi-photos" di Supabase Dashboard > Storage';
+  if (msg.includes('Unauthorized') || msg.includes('JWT') || msg.includes('not authenticated'))
+    return '🔴 TIDAK LOGIN / POLICY BLOCKED → Cek RLS policy Storage: tambahkan policy INSERT untuk authenticated users';
+  if (msg.includes('row-level security') || msg.includes('policy'))
+    return '🔴 POLICY BLOCKED → Di Supabase Storage > destinasi-photos > Policies, tambahkan policy untuk INSERT/UPDATE/SELECT';
+  if (msg.includes('size') || msg.includes('limit'))
+    return '🔴 FILE TERLALU BESAR → Kompres foto atau naikkan file size limit di bucket settings';
+  if (msg.includes('mime') || msg.includes('type'))
+    return '🔴 MIME TYPE TIDAK DIIZINKAN → Cek allowed MIME types di bucket settings';
+  return '🔴 Error tidak dikenal → lihat detail di atas';
+}
+</script>
+</body>
+</html>
