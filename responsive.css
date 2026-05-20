@@ -31,6 +31,111 @@
 }
 
 /* ══════════════════════════════════════════════════════════
+   ── MOBILE NAV DRAWER ──
+   Panel link navigasi yang muncul di mobile saat hamburger
+   diklik. Terpisah dari menu overlay GSAP (brand/contact).
+   ══════════════════════════════════════════════════════════ */
+
+.mobile-nav-drawer {
+    display: none; /* hanya aktif di mobile via media query */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 190; /* di bawah menu GSAP (z:150) tapi di atas hero */
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    padding-top: 72px; /* beri ruang untuk nav bar */
+    padding-bottom: 1.5rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    border-radius: 0 0 20px 20px;
+    /* Animasi slide-down */
+    transform: translateY(-100%);
+    opacity: 0;
+    transition:
+        transform 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 0.28s ease;
+    pointer-events: none;
+}
+
+.mobile-nav-drawer.is-open {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.mobile-nav-drawer ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.mobile-nav-drawer ul li {
+    border-bottom: 1px solid #f0ede6;
+}
+
+.mobile-nav-drawer ul li:last-child {
+    border-bottom: none;
+}
+
+.mobile-nav-drawer ul li a {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    text-decoration: none;
+    color: #222225;
+    font-family: "League Spartan", sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    transition: color 0.18s, background 0.18s;
+}
+
+.mobile-nav-drawer ul li a:active {
+    background: #f5f0e4;
+    color: #75a9b3;
+}
+
+/* Dot aktif untuk halaman saat ini */
+.mobile-nav-drawer ul li a.active-link {
+    color: #75a9b3;
+}
+
+.mobile-nav-drawer ul li a.active-link::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #75a9b3;
+    flex-shrink: 0;
+}
+
+/* Overlay gelap di belakang drawer */
+.mobile-nav-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 185;
+    background: rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.mobile-nav-overlay.is-open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* ── Aktifkan drawer hanya di mobile ── */
+@media (max-width: 768px) {
+    .mobile-nav-drawer  { display: block; }
+    .mobile-nav-overlay { display: block; }
+}
+
+/* ══════════════════════════════════════════════════════════
    ── BREAKPOINT: TABLET LEBAR (≤ 1200px) ──
    ══════════════════════════════════════════════════════════ */
 @media (max-width: 1200px) {
