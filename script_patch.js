@@ -1,11 +1,11 @@
 /* ══════════════════════════════════════════════════════════
    script_patch.js — Paket Voyager: Bronze / Silver / Gold
    Admin WA: 0838-6547-3781
-   Admin Email: kisahanda.bandung@gmail.com
+   Admin Email: KembangKelana@gmail.com
    ══════════════════════════════════════════════════════════ */
 
 const ADMIN_WA    = "6283865473781";
-const ADMIN_EMAIL = "kisahanda.bandung@gmail.com";
+const ADMIN_EMAIL = "KembangKelana@gmail.com";
 
 /* ── State paket yang sudah dibeli (simpan di sessionStorage) ── */
 let activePaket = sessionStorage.getItem("activePaket") || null; // "bronze"|"silver"|"gold"|null
@@ -477,7 +477,6 @@ window.copyText = function(elId, btn) {
    ══════════════════════════════════════════════════════════ */
 window.simulatePaymentConfirm = function(pkgKey) {
     closeModal("pay-modal");
-    const p = PAKETS[pkgKey];
     activePaket = pkgKey;
     sessionStorage.setItem("activePaket", pkgKey);
 
@@ -490,6 +489,9 @@ window.simulatePaymentConfirm = function(pkgKey) {
 
     /* Modal sukses dengan detail hak paket */
     showSuccessWithBenefits(pkgKey);
+
+    /* ── Setelah konfirmasi, kirim pesan WA ke admin beserta detail voyager ── */
+    setTimeout(() => openWhatsApp(pkgKey), 800);
 };
 
 /* ── Modal Sukses + Detail Hak Paket ── */
@@ -802,10 +804,65 @@ window.openMyPaketPanel = function() {
 /* ══════════════════════════════════════════════════════════
    4. BUKA WHATSAPP KE ADMIN
    ══════════════════════════════════════════════════════════ */
+
+/* ── Helper: kumpulkan data voyager dari form & voyagerState ── */
+function getVoyagerSummary() {
+    // Lokasi: dari voyagerState atau langsung dari input
+    const vbarInput = document.querySelector(".vbar-input");
+    const lokasi = (typeof voyagerState !== "undefined" && voyagerState.location)
+        ? voyagerState.location
+        : (vbarInput ? vbarInput.value.trim() : "");
+
+    // Place Details: dari voyagerState atau dari chip yang di-check
+    let placeDetails = [];
+    if (typeof voyagerState !== "undefined" && voyagerState.placeDetails && voyagerState.placeDetails.length) {
+        placeDetails = voyagerState.placeDetails;
+    } else {
+        placeDetails = [...document.querySelectorAll(".vbar-chip.checked")].map(c => c.dataset.value || "");
+    }
+
+    // Route Optimization
+    const routeEl = document.getElementById("vbarRouteDate");
+    const route = (typeof voyagerState !== "undefined" && voyagerState.routeOptimization)
+        ? voyagerState.routeOptimization
+        : (routeEl ? routeEl.textContent.trim() : "Belum dipilih");
+
+    // Stay & Duration dari voyagerState atau selector text
+    const stayEl  = document.getElementById("staySelector");
+    const durEl   = document.getElementById("durationSelector");
+    const stay = (typeof voyagerState !== "undefined" && voyagerState.stay)
+        ? voyagerState.stay
+        : (stayEl ? stayEl.childNodes[0]?.textContent?.trim() : "Menginap");
+    const duration = (typeof voyagerState !== "undefined" && voyagerState.duration)
+        ? voyagerState.duration
+        : (durEl ? durEl.childNodes[0]?.textContent?.trim() : "3 hari");
+
+    return { lokasi, placeDetails, route, stay, duration };
+}
+
 window.openWhatsApp = function(pkgKey) {
-    const p = PAKETS[pkgKey];
+    const p   = PAKETS[pkgKey];
+    const vs  = getVoyagerSummary();
+
+    const lokasiLine      = vs.lokasi       ? vs.lokasi                       : "Belum diisi";
+    const placeDetailLine = vs.placeDetails.length ? vs.placeDetails.join(", ") : "Belum dipilih";
+    const routeLine       = (vs.route && vs.route !== "Klik untuk pilih")     ? vs.route : "Belum dipilih";
+    const stayLine        = vs.stay     || "Belum dipilih";
+    const durationLine    = vs.duration || "Belum dipilih";
+
     const msg = encodeURIComponent(
-        `Halo Admin Kisah Anda! 👋\n\nSaya sudah membeli Paket *${p.nama}* (${fmtRp(p.harga)}) untuk Voyager Itinerary.\n\nMohon bantuannya untuk info lebih lanjut. Terima kasih! 🙏`
+`Halo Admin Kisah Anda! 👋
+
+Saya sudah membeli Paket *${p.nama}* (${fmtRp(p.harga)}) untuk Voyager Itinerary.
+
+📋 *Detail Perjalanan Saya:*
+📍 Lokasi Asal      : ${lokasiLine}
+🏷️ Place Details    : ${placeDetailLine}
+🛤️ Route Optimization: ${routeLine}
+🏨 Menginap         : ${stayLine}
+📅 Durasi           : ${durationLine}
+
+Mohon bantuannya untuk konfirmasi dan info itinerary lebih lanjut. Terima kasih! 🙏`
     );
     window.open(`https://wa.me/${ADMIN_WA}?text=${msg}`, "_blank");
 };
