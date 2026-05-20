@@ -15,11 +15,25 @@
 
   <!-- Styles -->
   <link rel="stylesheet" href="Blog.css" />
+  <link rel="stylesheet" href="Blog-responsive.css" />
 
   <!-- Supabase CDN (HARUS sebelum auth-modal.js dan blog.js) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
+
+<!-- ── MOBILE NAV OVERLAY ── -->
+<div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
+
+<!-- ── MOBILE NAV DRAWER ── -->
+<div class="mobile-nav-drawer" id="mobileNavDrawer">
+  <ul>
+    <li><a href="index.html">Beranda</a></li>
+    <li><a href="Blog.html" class="active-link">Blog</a></li>
+    <li><a href="destinasi.html">Destinasi</a></li>
+    <li><a href="history-ulasan.html">History Ulasan</a></li>
+  </ul>
+</div>
 
 <!-- ══════════════════════════════ NAV ══════════════════════════════ -->
 <nav class="nav" id="mainNav">
@@ -217,6 +231,45 @@
 -->
 <script src="auth-modal.js"></script>
 <script src="blog.js"></script>
+
+<!-- ── MOBILE NAV DRAWER SCRIPT ── -->
+<script>
+(function () {
+    const drawer  = document.getElementById("mobileNavDrawer");
+    const overlay = document.getElementById("mobileNavOverlay");
+    const toggle  = document.getElementById("navToggle");
+
+    if (!drawer || !overlay || !toggle) return;
+
+    let drawerOpen = false;
+
+    function openDrawer() {
+        drawerOpen = true;
+        drawer.classList.add("is-open");
+        overlay.classList.add("is-open");
+        toggle.classList.add("active");
+    }
+
+    function closeDrawer() {
+        drawerOpen = false;
+        drawer.classList.remove("is-open");
+        overlay.classList.remove("is-open");
+        toggle.classList.remove("active");
+    }
+
+    toggle.addEventListener("click", function (e) {
+        if (window.innerWidth > 768) return;
+        e.stopImmediatePropagation();
+        drawerOpen ? closeDrawer() : openDrawer();
+    }, true);
+
+    overlay.addEventListener("click", closeDrawer);
+
+    window.addEventListener("resize", function () {
+        if (window.innerWidth > 768 && drawerOpen) closeDrawer();
+    });
+})();
+</script>
 
 </body>
 </html>
