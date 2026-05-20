@@ -109,13 +109,21 @@
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
       box-shadow: 0 8px 32px rgba(0,0,0,0.18),
                   inset 0 1px 0 rgba(255,255,255,0.2);
+      flex-shrink: 0;
     }
     .menu-brand-logo {
-      width: 72px; height: 72px;
+      width: 72px !important;
+      height: 72px !important;
+      max-width: 72px !important;
+      max-height: 72px !important;
+      min-width: unset !important;
+      min-height: unset !important;
       object-fit: contain;
       display: block !important;
+      flex-shrink: 0;
     }
     .menu-brand-text-box {
       background: rgba(255,255,255,0.10);
@@ -126,6 +134,7 @@
       padding: 0.75rem 2.2rem 0.9rem;
       box-shadow: 0 8px 40px rgba(0,0,0,0.16),
                   inset 0 1px 0 rgba(255,255,255,0.15);
+      overflow: hidden;
     }
     .menu-brand-name {
       font-family: 'Playfair Display', serif !important;
@@ -136,6 +145,10 @@
       text-align: center;
       line-height: 1;
       display: block !important;
+      /* GSAP akan animasikan dari state ini */
+      opacity: 0;
+      transform: translateY(14px);
+      will-change: opacity, transform;
     }
     .char { display: inline-block; }
 
