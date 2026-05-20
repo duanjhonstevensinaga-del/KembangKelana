@@ -865,7 +865,9 @@ async function saveDest() {
 
   // Reload ulang dari DB agar data sinkron dan tombol bisa dipakai lagi
   _loadingDestinations = false;
-  await loadDestinationsFromDB();}
+  await loadDestinationsFromDB();
+}
+
 /* ══════════════════════════════════════ DELETE CARD ══════════════════════════════════════ */
 async function deleteCard(e, id) {
   e.stopPropagation();
