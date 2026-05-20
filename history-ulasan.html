@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histori Cerita Pengunjung — Kisah Anda</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@700;900&family=League+Spartan:wght@700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="history-ulasan.css" />
+</head>
+<body>
+
+    <nav class="nav-history">
+        <a href="destinasi.html" class="back-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M19 12H5M12 5l-7 7 7 7"/>
+            </svg>
+            Kembali ke Destinasi
+        </a>
+    </nav>
+
+    <main class="history-main">
+        <div class="history-header-block">
+            <h1>Arsip Catatan Perjalanan</h1>
+            <p>Jelajahi rangkuman seluruh impresi jujur yang ditinggalkan para penjelajah kota Bandung</p>
+        </div>
+
+        <div id="globalHistoryLog" class="history-wrapper-card">
+            <p class="loading-text">Menghubungkan ke pusat data...</p>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <script src="history-ulasan.js"></script>
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Detail Destinasi — Kisah Anda</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="detailcss.css" />
+</head>
+<body>
+
+<!-- ── TOP NAV ── -->
+<div class="auth-bar" id="authBar" style="display:none">
+    <span id="authBarEmail" class="user-email"></span>
+    <span id="authBarBadge" class="admin-badge" style="display:none">Admin</span>
+    <button class="auth-bar-btn logout" id="btnLogout">Keluar</button>
+</div>
+<nav class="top-nav">
+    <a href="destinasi.html" class="back-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M19 12H5M12 5l-7 7 7 7"/>
+        </svg>
+        Kembali
+    </a>
+    <span class="nav-title" id="navTitle">Detail Destinasi</span>
+    <div class="nav-icon-btn" title="Edit">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+        </svg>
+    </div>
+</nav>
+
+<!-- ── MAIN WRAPPER ── -->
+<div class="detail-wrapper">
+
+    <!-- ── DETAIL CARD ── -->
+    <div class="detail-card">
+
+        <!-- Header -->
+        <div class="detail-header">
+            <div class="detail-header-left">
+                <h1 id="destName">—</h1>
+                <div class="detail-tagline" id="destTagline">—</div>
+            </div>
+            <div class="edit-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                    <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Meta chips -->
+        <div class="detail-meta">
+            <span class="meta-chip category" id="destCategory">—</span>
+            <span class="meta-chip rating"   id="destRating">⭐ —</span>
+            <span class="meta-chip"          id="destDistance">📍 — km</span>
+        </div>
+
+        <!-- Body: image + description -->
+        <div class="detail-body">
+            <div class="detail-img-wrap">
+                <img id="destImg" src="https://placehold.co/400x260/8B7355/fff?text=Destinasi" alt="Foto Destinasi" />
+            </div>
+            <p class="detail-description" id="destDesc">—</p>
+        </div>
+
+        <div class="detail-divider"></div>
+
+        <!-- Action Buttons -->
+        <div class="detail-actions">
+            <a id="btnLocation" href="#" target="_blank" rel="noopener" class="action-btn btn-location">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/>
+                    <circle cx="12" cy="10" r="3"/>
+                </svg>
+                Location
+            </a>
+            <a id="btnInfo" href="#" target="_blank" rel="noopener" class="action-btn btn-info">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="12"/>
+                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                More Information
+            </a>
+        </div>
+
+    </div>
+
+    <!-- ── REVIEWS SECTION ── -->
+    <div class="reviews-section">
+        <div class="reviews-container">
+            <h2 class="reviews-title">Cerita Penjelajah</h2>
+            <p class="reviews-subtitle">Bagikan kisah atau baca pengalaman autentik dari pengunjung lain.</p>
+
+            <div class="reviews-overview">
+                <div class="overview-rating">
+                    <span id="reviewsAverageRating">0.0</span>
+                    <div class="overview-stars" id="reviewsAverageStars">☆☆☆☆☆</div>
+                    <span id="reviewsCount">(0 ulasan)</span>
+                </div>
+                <button class="write-review-btn" id="btnToggleForm">Tulis Ulasan</button>
+            </div>
+
+            <form id="reviewForm" class="review-form hidden">
+                <h3>Bagikan Kisah Anda</h3>
+                <div class="form-group">
+                    <label for="reviewName">Nama Lengkap</label>
+                    <input type="text" id="reviewName" placeholder="Masukkan nama Anda..." />
+                </div>
+                <div class="form-group">
+                    <label>Rating Destinasi</label>
+                    <div class="rating-input-stars" id="ratingInputStars">
+                        <span data-value="1">☆</span>
+                        <span data-value="2">☆</span>
+                        <span data-value="3">☆</span>
+                        <span data-value="4">☆</span>
+                        <span data-value="5">☆</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="reviewText">Ulasan / Cerita Perjalanan</label>
+                    <textarea id="reviewText" rows="4" placeholder="Bagaimana pengalaman Anda di tempat ini? Ceritakan momen terbaik Anda..."></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="cancel-review-btn" id="btnCancelReview">Batal</button>
+                    <button type="submit" class="submit-review-btn" id="btnSubmitReview">Kirim Ulasan</button>
+                </div>
+            </form>
+
+            <div class="reviews-list" id="reviewsList">
+                <p class="loading-reviews">Memuat ulasan...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── DESTINASI LAINNYA ── -->
+    <div class="other-section">
+        <div class="other-title">Destinasi Lainnya</div>
+        <div class="other-grid" id="otherGrid"></div>
+    </div>
+
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- !! Supabase HARUS di-load sebelum detaildestinasi.js !! -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="detaildestinasi.js"></script>
+
+</body>
+</html>

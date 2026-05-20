@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Admin QR — Kisah Anda</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:wght@700&family=League+Spartan:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+/* ════ RESET & BASE ════ */
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+
+:root {
+    --teal:    #2c6e7a;
+    --teal-lt: #75a9b3;
+    --teal-bg: #f0f8fa;
+    --bronze:  #cd7f32;
+    --silver:  #8aa3b0;
+    --gold:    #c5a21a;
+    --dark:    #1a2e32;
+    --card-bg: rgba(255,255,255,0.92);
+    --radius:  20px;
+}
+
+body {
+    font-family: 'DM Sans', sans-serif;
+    background: linear-gradient(145deg, #e4f2f5 0%, #cce6ec 40%, #b8dde6 100%);
+    min-height: 100vh;
+    padding: 0;
+    color: var(--dark);
+}
+
+/* ════ HEADER ════ */
+.header {
+    background: linear-gradient(135deg, #1a3a40, #2c6e7a);
+    padding: 28px 40px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 24px rgba(44,110,122,.25);
+}
+
+.header-brand {
+    display: flex; align-items: center; gap: 14px;
+}
+.header-logo {
+    width: 44px; height: 44px;
+    background: rgba(255,255,255,.15);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+}
+.header-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px; color: #fff;
+    letter-spacing: .3px;
+}
+.header-sub {
+    font-size: 11px; color: rgba(255,255,255,.6);
+    margin-top: 2px; font-weight: 500;
+}
+.header-badge {
+    background: rgba(255,255,255,.15);
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: 20px; padding: 6px 16px;
+    font-size: 11px; font-weight: 700; color: rgba(255,255,255,.85);
+    letter-spacing: .5px; text-transform: uppercase;
+}
+
+/* ════ MAIN ════ */
+.main { max-width: 1100px; margin: 0 auto; padding: 40px 24px 80px; }
+
+/* ════ PANDUAN ════ */
+.guide-banner {
+    background: linear-gradient(135deg, #fff9ee, #fff3d4);
+    border: 1.5px solid #fce08a;
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin-bottom: 36px;
+    display: flex; gap: 16px; align-items: flex-start;
+}
+.guide-icon { font-size: 28px; flex-shrink: 0; margin-top: 2px; }
+.guide-title {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 15px; font-weight: 900; color: #8a6200;
+    margin-bottom: 8px;
+}
+.guide-steps {
+    display: flex; flex-direction: column; gap: 5px;
+}
+.guide-step {
+    font-size: 12px; color: #7a5800;
+    display: flex; gap: 8px; align-items: flex-start;
+}
+.guide-step-num {
+    width: 18px; height: 18px;
+    background: #f0c040; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 900; color: #7a5800;
+    flex-shrink: 0; margin-top: 1px;
+}
+
+/* ════ GRID PAKET ════ */
+.paket-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+}
+
+/* ════ CARD PAKET ════ */
+.paket-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(44,110,122,.12);
+    border: 1px solid rgba(255,255,255,.8);
+    transition: transform .2s, box-shadow .2s;
+}
+.paket-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 56px rgba(44,110,122,.18);
+}
+
+/* Header card */
+.card-header {
+    padding: 20px 22px 16px;
+    display: flex; align-items: center; gap: 12px;
+    border-bottom: 1.5px solid #f0f7f9;
+}
+.card-emoji { font-size: 32px; }
+.card-name {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 18px; font-weight: 900;
+}
+.card-price {
+    font-size: 12px; font-weight: 700; color: #9abcc4;
+    margin-top: 2px;
+}
+.card-status {
+    margin-left: auto;
+    padding: 4px 12px; border-radius: 20px;
+    font-size: 10px; font-weight: 800;
+    letter-spacing: .5px; text-transform: uppercase;
+}
+.status-active   { background: #d8f5e8; color: #1e7e4e; }
+.status-empty    { background: #f5e8e8; color: #c0392b; }
+
+/* QR drop zone */
+.card-body { padding: 20px 22px; }
+
+.qr-dropzone {
+    width: 100%;
+    aspect-ratio: 1;
+    max-width: 220px;
+    margin: 0 auto 18px;
+    border-radius: 16px;
+    border: 2.5px dashed #c0dde4;
+    background: var(--teal-bg);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: border-color .2s, background .2s;
+    position: relative;
+    overflow: hidden;
+}
+.qr-dropzone:hover, .qr-dropzone.drag-over {
+    border-color: var(--teal);
+    background: #e4f2f5;
+}
+.qr-dropzone input[type="file"] {
+    position: absolute; inset: 0;
+    opacity: 0; cursor: pointer; width: 100%; height: 100%;
+}
+.qr-drop-icon { font-size: 36px; }
+.qr-drop-text {
+    font-size: 12px; font-weight: 600; color: var(--teal-lt);
+    text-align: center; line-height: 1.5;
+}
+.qr-drop-hint {
+    font-size: 10px; color: #aac8d0;
+    text-align: center;
+}
+
+/* Preview gambar di dalam dropzone */
+.qr-preview-img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: contain; padding: 12px;
+    border-radius: 14px;
+    background: #fff;
+}
+.qr-preview-overlay {
+    position: absolute; inset: 0;
+    background: rgba(44,110,122,.55);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 6px;
+    opacity: 0;
+    transition: opacity .2s;
+    border-radius: 14px;
+}
+.qr-dropzone:hover .qr-preview-overlay { opacity: 1; }
+.qr-preview-overlay span {
+    font-size: 11px; font-weight: 700; color: #fff;
+}
+
+/* Info path */
+.path-row {
+    display: flex; align-items: center; gap: 8px;
+    background: #f0f8fa;
+    border: 1px solid #d0e8ed;
+    border-radius: 10px; padding: 9px 12px;
+    margin-bottom: 12px;
+}
+.path-label { font-size: 10px; font-weight: 700; color: #9abcc4; flex-shrink:0; }
+.path-value {
+    font-size: 11px; font-weight: 700; color: var(--dark);
+    font-family: 'Courier New', monospace;
+    word-break: break-all; flex: 1;
+}
+.path-copy {
+    background: #d8edf2; border: none; border-radius: 6px;
+    padding: 3px 8px; font-size: 10px; font-weight: 700; color: var(--teal);
+    cursor: pointer; flex-shrink: 0; transition: background .15s;
+}
+.path-copy:hover { background: #c0dde4; }
+.path-copy.copied { background: #c8f0da; color: #1e7e4e; }
+
+/* Action buttons */
+.card-actions { display: flex; flex-direction: column; gap: 8px; }
+
+.btn-save {
+    width: 100%; padding: 12px;
+    border-radius: 12px; border: none;
+    font-family: 'League Spartan', sans-serif;
+    font-size: 13px; font-weight: 800;
+    cursor: pointer; transition: background .2s, transform .1s;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.btn-save:active { transform: scale(0.98); }
+.btn-save:disabled { opacity: .5; cursor: not-allowed; }
+
+.btn-remove {
+    width: 100%; padding: 9px;
+    border-radius: 10px;
+    background: none; border: 1.5px solid #f5c0c0;
+    color: #c0392b; font-size: 11px; font-weight: 700;
+    cursor: pointer; font-family: 'DM Sans', sans-serif;
+    transition: background .15s;
+    display: none;
+}
+.btn-remove:hover { background: #fde8e8; }
+
+/* Feedback toast */
+.card-toast {
+    text-align: center; font-size: 11px; font-weight: 600;
+    padding: 6px; border-radius: 8px; display: none;
+    font-family: 'DM Sans', sans-serif;
+}
+.card-toast.show-ok  { display: block; background: #d8f5e8; color: #1e7e4e; }
+.card-toast.show-err { display: block; background: #fde8e8; color: #c0392b; }
+
+/* ════ LIVE TEST SECTION ════ */
+.test-section {
+    margin-top: 48px;
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 28px 30px;
+    box-shadow: 0 4px 24px rgba(44,110,122,.10);
+    border: 1px solid rgba(255,255,255,.8);
+}
+.test-title {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 16px; font-weight: 900; color: var(--dark);
+    margin-bottom: 4px;
+}
+.test-sub { font-size: 12px; color: #9abcc4; margin-bottom: 20px; }
+.test-grid {
+    display: flex; gap: 12px; flex-wrap: wrap;
+}
+.test-btn {
+    flex: 1; min-width: 120px; padding: 11px 16px;
+    border-radius: 12px; border: 1.5px solid #d8edf2;
+    background: #f0f8fa; color: var(--teal);
+    font-family: 'League Spartan', sans-serif;
+    font-size: 12px; font-weight: 800;
+    cursor: pointer; transition: all .2s;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.test-btn:hover { background: var(--teal); color: #fff; border-color: var(--teal); }
+
+/* ════ FOOTER NOTE ════ */
+.footer-note {
+    margin-top: 40px; text-align: center;
+    font-size: 11px; color: rgba(44,110,122,.55);
+    line-height: 1.7;
+}
+.footer-note strong { color: var(--teal); }
+
+/* ════ RESPONSIVE ════ */
+@media (max-width: 600px) {
+    .header { padding: 20px; flex-direction: column; gap: 12px; text-align: center; }
+    .main { padding: 24px 16px 60px; }
+    .paket-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════ HEADER ════ -->
+<header class="header">
+    <div class="header-brand">
+        <div class="header-logo">
+            <img src="Simple KS Letter Logo (Kisah Anda) (2).svg" alt="" style="height:28px;width:auto;" onerror="this.style.display='none';this.parentElement.innerHTML='🗺️';" />
+        </div>
+        <div>
+            <div class="header-title">Kisah Anda</div>
+            <div class="header-sub">Panel Admin · Manajemen QR Pembayaran</div>
+        </div>
+    </div>
+    <div class="header-badge">🔐 Admin Only</div>
+</header>
+
+<!-- ════ MAIN ════ -->
+<main class="main">
+
+    <!-- Panduan -->
+    <div class="guide-banner">
+        <div class="guide-icon">📋</div>
+        <div>
+            <div class="guide-title">Cara Pasang QR Code Pembayaran</div>
+            <div class="guide-steps">
+                <div class="guide-step">
+                    <div class="guide-step-num">1</div>
+                    <span>Buka aplikasi m-banking / dompet digital kamu, lalu generate QR Code untuk masing-masing nominal paket (Bronze Rp 5.000 · Silver Rp 10.000 · Gold Rp 15.000).</span>
+                </div>
+                <div class="guide-step">
+                    <div class="guide-step-num">2</div>
+                    <span>Screenshot QR Code tersebut, pastikan resolusi bagus dan mudah di-scan.</span>
+                </div>
+                <div class="guide-step">
+                    <div class="guide-step-num">3</div>
+                    <span>Upload ke kotak QR masing-masing paket di bawah ini — gambar akan otomatis disimpan ke folder <code style="background:#ffe;padding:1px 4px;border-radius:4px;">qr/</code> dengan nama file yang sudah ditentukan.</span>
+                </div>
+                <div class="guide-step">
+                    <div class="guide-step-num">4</div>
+                    <span>Selesai! QR akan langsung muncul di modal pembayaran ketika user membeli paket.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Grid paket -->
+    <div class="paket-grid">
+
+        <!-- ── BRONZE ── -->
+        <div class="paket-card" id="card-bronze">
+            <div class="card-header">
+                <div class="card-emoji">🥉</div>
+                <div>
+                    <div class="card-name" style="color:var(--bronze);">Bronze</div>
+                    <div class="card-price">Rp 5.000 · sekali bayar</div>
+                </div>
+                <div class="card-status" id="status-bronze" style="display:none;"></div>
+            </div>
+            <div class="card-body">
+                <!-- Drop zone -->
+                <div class="qr-dropzone" id="drop-bronze" onclick="triggerFile('bronze')">
+                    <div class="qr-drop-icon" id="icon-bronze">📤</div>
+                    <div class="qr-drop-text" id="text-bronze">Upload QR Bronze<br>Klik atau seret file ke sini</div>
+                    <div class="qr-drop-hint">PNG · JPG · WEBP · maks. 2 MB</div>
+                    <input type="file" id="file-bronze" accept="image/png,image/jpeg,image/webp"
+                           onchange="handleFile('bronze', this)" />
+                </div>
+
+                <!-- Path info -->
+                <div class="path-row">
+                    <span class="path-label">Simpan ke</span>
+                    <span class="path-value" id="path-bronze">qr/qr-bronze.png</span>
+                    <button class="path-copy" onclick="copyPath('path-bronze', this)">Salin</button>
+                </div>
+
+                <!-- Actions -->
+                <div class="card-actions">
+                    <button class="btn-save" id="save-bronze"
+                            style="background:var(--bronze);color:#fff;"
+                            onclick="saveQR('bronze')" disabled>
+                        💾 Simpan QR Bronze
+                    </button>
+                    <button class="btn-remove" id="remove-bronze" onclick="removeQR('bronze')">
+                        🗑 Hapus QR yang tersimpan
+                    </button>
+                </div>
+                <div class="card-toast" id="toast-bronze"></div>
+            </div>
+        </div>
+
+        <!-- ── SILVER ── -->
+        <div class="paket-card" id="card-silver">
+            <div class="card-header">
+                <div class="card-emoji">🥈</div>
+                <div>
+                    <div class="card-name" style="color:var(--silver);">Silver</div>
+                    <div class="card-price">Rp 10.000 · sekali bayar</div>
+                </div>
+                <div class="card-status" id="status-silver" style="display:none;"></div>
+            </div>
+            <div class="card-body">
+                <div class="qr-dropzone" id="drop-silver" onclick="triggerFile('silver')">
+                    <div class="qr-drop-icon" id="icon-silver">📤</div>
+                    <div class="qr-drop-text" id="text-silver">Upload QR Silver<br>Klik atau seret file ke sini</div>
+                    <div class="qr-drop-hint">PNG · JPG · WEBP · maks. 2 MB</div>
+                    <input type="file" id="file-silver" accept="image/png,image/jpeg,image/webp"
+                           onchange="handleFile('silver', this)" />
+                </div>
+                <div class="path-row">
+                    <span class="path-label">Simpan ke</span>
+                    <span class="path-value" id="path-silver">qr/qr-silver.png</span>
+                    <button class="path-copy" onclick="copyPath('path-silver', this)">Salin</button>
+                </div>
+                <div class="card-actions">
+                    <button class="btn-save" id="save-silver"
+                            style="background:var(--silver);color:#fff;"
+                            onclick="saveQR('silver')" disabled>
+                        💾 Simpan QR Silver
+                    </button>
+                    <button class="btn-remove" id="remove-silver" onclick="removeQR('silver')">
+                        🗑 Hapus QR yang tersimpan
+                    </button>
+                </div>
+                <div class="card-toast" id="toast-silver"></div>
+            </div>
+        </div>
+
+        <!-- ── GOLD ── -->
+        <div class="paket-card" id="card-gold">
+            <div class="card-header">
+                <div class="card-emoji">🥇</div>
+                <div>
+                    <div class="card-name" style="color:var(--gold);">Gold</div>
+                    <div class="card-price">Rp 15.000 · sekali bayar</div>
+                </div>
+                <div class="card-status" id="status-gold" style="display:none;"></div>
+            </div>
+            <div class="card-body">
+                <div class="qr-dropzone" id="drop-gold" onclick="triggerFile('gold')">
+                    <div class="qr-drop-icon" id="icon-gold">📤</div>
+                    <div class="qr-drop-text" id="text-gold">Upload QR Gold<br>Klik atau seret file ke sini</div>
+                    <div class="qr-drop-hint">PNG · JPG · WEBP · maks. 2 MB</div>
+                    <input type="file" id="file-gold" accept="image/png,image/jpeg,image/webp"
+                           onchange="handleFile('gold', this)" />
+                </div>
+                <div class="path-row">
+                    <span class="path-label">Simpan ke</span>
+                    <span class="path-value" id="path-gold">qr/qr-gold.png</span>
+                    <button class="path-copy" onclick="copyPath('path-gold', this)">Salin</button>
+                </div>
+                <div class="card-actions">
+                    <button class="btn-save" id="save-gold"
+                            style="background:var(--gold);color:#fff;"
+                            onclick="saveQR('gold')" disabled>
+                        💾 Simpan QR Gold
+                    </button>
+                    <button class="btn-remove" id="remove-gold" onclick="removeQR('gold')">
+                        🗑 Hapus QR yang tersimpan
+                    </button>
+                </div>
+                <div class="card-toast" id="toast-gold"></div>
+            </div>
+        </div>
+
+    </div><!-- /paket-grid -->
+
+    <!-- ════ LIVE TEST ════ -->
+    <div class="test-section">
+        <div class="test-title">🔍 Cek Status QR</div>
+        <div class="test-sub">Klik tombol di bawah untuk memverifikasi apakah file QR sudah tersedia di server.</div>
+        <div class="test-grid">
+            <button class="test-btn" onclick="checkQR('bronze')">🥉 Cek Bronze</button>
+            <button class="test-btn" onclick="checkQR('silver')">🥈 Cek Silver</button>
+            <button class="test-btn" onclick="checkQR('gold')">🥇 Cek Gold</button>
+        </div>
+        <div id="check-result" style="margin-top:14px;font-size:12px;line-height:1.8;"></div>
+    </div>
+
+    <!-- Instruksi manual -->
+    <div class="test-section" style="margin-top:20px;">
+        <div class="test-title">📁 Cara Manual (via File Manager / FTP)</div>
+        <div class="test-sub">Alternatif jika upload lewat halaman ini tidak tersedia di hosting kamu.</div>
+        <ol style="padding-left:18px;display:flex;flex-direction:column;gap:10px;font-size:12px;color:#4a6e78;line-height:1.6;">
+            <li>Buat folder <code style="background:#f0f8fa;padding:2px 6px;border-radius:5px;font-size:11px;color:#2c6e7a;">qr/</code> di root folder project kamu (sejajar dengan <code style="background:#f0f8fa;padding:2px 6px;border-radius:5px;font-size:11px;color:#2c6e7a;">index.html</code>).</li>
+            <li>Simpan gambar QR dengan nama tepat sesuai tabel berikut:</li>
+        </ol>
+        <table style="width:100%;border-collapse:collapse;margin-top:14px;font-size:12px;">
+            <thead>
+                <tr style="background:#f0f8fa;">
+                    <th style="text-align:left;padding:9px 12px;font-size:10px;color:#75a9b3;text-transform:uppercase;letter-spacing:.5px;font-weight:800;">Paket</th>
+                    <th style="text-align:left;padding:9px 12px;font-size:10px;color:#75a9b3;text-transform:uppercase;letter-spacing:.5px;font-weight:800;">Nama File</th>
+                    <th style="text-align:left;padding:9px 12px;font-size:10px;color:#75a9b3;text-transform:uppercase;letter-spacing:.5px;font-weight:800;">Path Lengkap</th>
+                    <th style="text-align:right;padding:9px 12px;font-size:10px;color:#75a9b3;text-transform:uppercase;letter-spacing:.5px;font-weight:800;">Nominal</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="border-top:1px solid #e8f2f5;">
+                    <td style="padding:10px 12px;font-weight:700;color:#cd7f32;">🥉 Bronze</td>
+                    <td style="padding:10px 12px;"><code style="background:#f7f0e8;padding:2px 8px;border-radius:5px;color:#8a5820;">qr-bronze.png</code></td>
+                    <td style="padding:10px 12px;"><code style="background:#f5f5f5;padding:2px 8px;border-radius:5px;color:#444;font-size:11px;">qr/qr-bronze.png</code></td>
+                    <td style="padding:10px 12px;text-align:right;font-weight:800;">Rp 5.000</td>
+                </tr>
+                <tr style="border-top:1px solid #e8f2f5;">
+                    <td style="padding:10px 12px;font-weight:700;color:#8aa3b0;">🥈 Silver</td>
+                    <td style="padding:10px 12px;"><code style="background:#eef2f5;padding:2px 8px;border-radius:5px;color:#4a7080;">qr-silver.png</code></td>
+                    <td style="padding:10px 12px;"><code style="background:#f5f5f5;padding:2px 8px;border-radius:5px;color:#444;font-size:11px;">qr/qr-silver.png</code></td>
+                    <td style="padding:10px 12px;text-align:right;font-weight:800;">Rp 10.000</td>
+                </tr>
+                <tr style="border-top:1px solid #e8f2f5;">
+                    <td style="padding:10px 12px;font-weight:700;color:#c5a21a;">🥇 Gold</td>
+                    <td style="padding:10px 12px;"><code style="background:#fdf8e4;padding:2px 8px;border-radius:5px;color:#8a7000;">qr-gold.png</code></td>
+                    <td style="padding:10px 12px;"><code style="background:#f5f5f5;padding:2px 8px;border-radius:5px;color:#444;font-size:11px;">qr/qr-gold.png</code></td>
+                    <td style="padding:10px 12px;text-align:right;font-weight:800;">Rp 15.000</td>
+                </tr>
+            </tbody>
+        </table>
+        <div style="margin-top:12px;padding:10px 14px;background:#f0f8fa;border-radius:10px;border:1px solid #cce6ec;font-size:11px;color:#5a8a94;line-height:1.6;">
+            💡 Format file yang didukung: <strong>PNG</strong> (disarankan), JPG, atau WEBP. Pastikan ukuran file tidak lebih dari 2 MB dan QR terlihat jelas saat diperbesar.
+        </div>
+    </div>
+
+    <div class="footer-note">
+        <strong>Kisah Anda</strong> — Panel Admin QR · Jangan bagikan halaman ini ke publik.<br>
+        Perubahan QR berlaku langsung setelah file disimpan di folder <code>qr/</code>.
+    </div>
+
+</main>
+
+<script>
+/* ════ DATA PAKET ════ */
+const QR_PATHS = {
+    bronze : "qr/qr-bronze.png",
+    silver : "qr/qr-silver.png",
+    gold   : "qr/qr-gold.png",
+};
+
+/* Blob sementara dari file yang dipilih user */
+const pendingBlobs = {};
+
+/* ════ INIT: cek apakah QR sudah ada ════ */
+window.addEventListener("DOMContentLoaded", () => {
+    ["bronze","silver","gold"].forEach(checkExisting);
+
+    /* Setup drag-and-drop */
+    ["bronze","silver","gold"].forEach(pkg => {
+        const zone = document.getElementById(`drop-${pkg}`);
+        if (!zone) return;
+        zone.addEventListener("dragover",  e => { e.preventDefault(); zone.classList.add("drag-over"); });
+        zone.addEventListener("dragleave", () => zone.classList.remove("drag-over"));
+        zone.addEventListener("drop", e => {
+            e.preventDefault();
+            zone.classList.remove("drag-over");
+            const file = e.dataTransfer.files[0];
+            if (file) simulateFileInput(pkg, file);
+        });
+    });
+});
+
+function checkExisting(pkg) {
+    const img = new Image();
+    img.onload = () => {
+        setStatus(pkg, true);
+        showPreviewInZone(pkg, img.src);
+        document.getElementById(`remove-${pkg}`).style.display = "block";
+    };
+    img.onerror = () => setStatus(pkg, false);
+    img.src = QR_PATHS[pkg] + "?t=" + Date.now(); // cache bust
+}
+
+function setStatus(pkg, active) {
+    const el = document.getElementById(`status-${pkg}`);
+    if (!el) return;
+    el.style.display = "inline-flex";
+    el.className = "card-status " + (active ? "status-active" : "status-empty");
+    el.textContent = active ? "✓ QR Aktif" : "✕ Belum Ada";
+}
+
+/* ════ TRIGGER INPUT FILE ════ */
+function triggerFile(pkg) {
+    // Klik pada div akan trigger input file (input sudah ada dalam div)
+    // Cukup stop propagation pada input agar tidak double
+}
+
+/* ════ HANDLE FILE DIPILIH ════ */
+function handleFile(pkg, input) {
+    const file = input.files[0];
+    if (!file) return;
+    simulateFileInput(pkg, file);
+}
+
+function simulateFileInput(pkg, file) {
+    if (!file.type.startsWith("image/")) {
+        showToast(pkg, "❌ File harus berupa gambar (PNG/JPG/WEBP).", "err");
+        return;
+    }
+    if (file.size > 2 * 1024 * 1024) {
+        showToast(pkg, "❌ Ukuran file maks. 2 MB.", "err");
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = e => {
+        pendingBlobs[pkg] = { dataUrl: e.target.result, file };
+        showPreviewInZone(pkg, e.target.result);
+        document.getElementById(`save-${pkg}`).disabled = false;
+        showToast(pkg, "✅ Gambar siap — klik Simpan untuk menyimpan.", "ok");
+    };
+    reader.readAsDataURL(file);
+}
+
+/* ════ TAMPILKAN PREVIEW DI DROP ZONE ════ */
+function showPreviewInZone(pkg, src) {
+    const zone = document.getElementById(`drop-${pkg}`);
+    if (!zone) return;
+
+    /* Hapus konten teks lama */
+    zone.querySelector(".qr-drop-icon") && (zone.querySelector(".qr-drop-icon").style.display = "none");
+    zone.querySelector(".qr-drop-text") && (zone.querySelector(".qr-drop-text").style.display = "none");
+    zone.querySelector(".qr-drop-hint") && (zone.querySelector(".qr-drop-hint").style.display = "none");
+
+    /* Hapus preview lama jika ada */
+    zone.querySelector(".qr-preview-img")?.remove();
+    zone.querySelector(".qr-preview-overlay")?.remove();
+
+    const img = document.createElement("img");
+    img.className = "qr-preview-img";
+    img.src = src;
+    img.alt = "QR Preview";
+
+    const overlay = document.createElement("div");
+    overlay.className = "qr-preview-overlay";
+    overlay.innerHTML = `<span style="font-size:22px;">🔄</span><span>Ganti Gambar</span>`;
+
+    zone.insertBefore(img, zone.querySelector("input"));
+    zone.insertBefore(overlay, zone.querySelector("input"));
+}
+
+/* ════ SIMPAN QR ════ */
+async function saveQR(pkg) {
+    const pending = pendingBlobs[pkg];
+    if (!pending) return;
+
+    const btn = document.getElementById(`save-${pkg}`);
+    btn.disabled = true;
+    btn.textContent = "Menyimpan...";
+
+    try {
+        /*
+         * ── OPSI A: Jika kamu pakai Supabase Storage ──────────────────────
+         * Uncomment kode di bawah dan sesuaikan bucket name.
+         *
+         * const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+         * const { error } = await sb.storage
+         *     .from('qr-codes')
+         *     .upload(`qr-${pkg}.png`, pending.file, { upsert: true, contentType: pending.file.type });
+         * if (error) throw error;
+         * showToast(pkg, "✅ QR berhasil diupload ke Supabase Storage!", "ok");
+         * ──────────────────────────────────────────────────────────────────
+         *
+         * ── OPSI B: Download file untuk disimpan manual ke folder qr/ ────
+         */
+        downloadQR(pkg, pending.dataUrl, pending.file);
+        setStatus(pkg, true);
+        document.getElementById(`remove-${pkg}`).style.display = "block";
+        showToast(pkg, `✅ File didownload — pindah ke folder qr/ dengan nama qr-${pkg}.png`, "ok");
+
+    } catch (err) {
+        showToast(pkg, "❌ Gagal: " + err.message, "err");
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = `💾 Simpan QR ${pkg.charAt(0).toUpperCase()+pkg.slice(1)}`;
+    }
+}
+
+/* ── Download gambar dengan nama file yang benar ── */
+function downloadQR(pkg, dataUrl, file) {
+    const ext = file.type.includes("png") ? "png" : file.type.includes("webp") ? "webp" : "jpg";
+    const a   = document.createElement("a");
+    a.href     = dataUrl;
+    a.download = `qr-${pkg}.${ext}`;
+    a.click();
+}
+
+/* ════ HAPUS QR (hanya dari tampilan, bukan dari disk) ════ */
+function removeQR(pkg) {
+    if (!confirm(`Hapus preview QR ${pkg.toUpperCase()}? File di server harus dihapus manual.`)) return;
+
+    const zone = document.getElementById(`drop-${pkg}`);
+    zone.querySelector(".qr-preview-img")?.remove();
+    zone.querySelector(".qr-preview-overlay")?.remove();
+
+    zone.querySelector(".qr-drop-icon") && (zone.querySelector(".qr-drop-icon").style.display = "");
+    zone.querySelector(".qr-drop-text") && (zone.querySelector(".qr-drop-text").style.display = "");
+    zone.querySelector(".qr-drop-hint") && (zone.querySelector(".qr-drop-hint").style.display = "");
+
+    document.getElementById(`save-${pkg}`).disabled = true;
+    document.getElementById(`remove-${pkg}`).style.display = "none";
+    delete pendingBlobs[pkg];
+    setStatus(pkg, false);
+    showToast(pkg, "🗑 Preview dihapus. Hapus file di server secara manual.", "ok");
+}
+
+/* ════ CEK QR DI SERVER ════ */
+function checkQR(pkg) {
+    const result = document.getElementById("check-result");
+    result.innerHTML = `<span style="color:#75a9b3;">⏳ Mengecek ${pkg}...</span>`;
+
+    const img = new Image();
+    const start = Date.now();
+    img.onload = () => {
+        const ms = Date.now() - start;
+        result.innerHTML += `<br>✅ <strong style="color:#1e7e4e;">qr/qr-${pkg}.png</strong> — ditemukan (${img.naturalWidth}×${img.naturalHeight}px · ${ms}ms)`;
+    };
+    img.onerror = () => {
+        result.innerHTML += `<br>❌ <strong style="color:#c0392b;">qr/qr-${pkg}.png</strong> — tidak ditemukan di server`;
+    };
+    img.src = QR_PATHS[pkg] + "?t=" + Date.now();
+}
+
+/* ════ HELPERS ════ */
+function showToast(pkg, msg, type) {
+    const el = document.getElementById(`toast-${pkg}`);
+    if (!el) return;
+    el.textContent = msg;
+    el.className = "card-toast show-" + type;
+    clearTimeout(el._t);
+    el._t = setTimeout(() => { el.className = "card-toast"; }, 4000);
+}
+
+function copyPath(elId, btn) {
+    const text = document.getElementById(elId)?.textContent || "";
+    navigator.clipboard.writeText(text).then(() => {
+        const orig = btn.textContent;
+        btn.textContent = "✓";
+        btn.classList.add("copied");
+        setTimeout(() => { btn.textContent = orig; btn.classList.remove("copied"); }, 2000);
+    });
+}
+</script>
+
+</body>
+</html>

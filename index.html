@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kisah Anda — Bandung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Boldonse&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=League+Spartan:wght@700&family=Playfair+Display&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="index.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
+</head>
+<body>
+<!-- ── NAV ── -->
+<nav class="nav">
+    <div class="nav-logo-wrap">
+        <a href="#">
+            <img src="Simple KS Letter Logo (Kisah Anda) (2).svg" alt="Logo" class="nav-logo-img" />
+        </a>
+    </div>
+    <ul class="nav-links">
+        <li><a href="#">Beranda</a></li>
+        <li><a href="Blog.html">Blog</a></li>
+        <li><a href="destinasi.html">Destinasi</a></li>
+        <li><a href="history-ulasan.html">History Ulasan</a></li>
+    </ul>
+    <div class="nav-right">
+        <div class="nav-icon-btn" title="Edit">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+        </div>
+
+        <!-- ── WISHLIST BUTTON → wishlist.html ── -->
+        <a href="wishlist.html" class="nav-wishlist-link" id="navWishlistLink" title="Wishlist saya">
+            <div class="nav-icon-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>
+            </div>
+            <span class="wishlist-badge" id="wishlistBadge"></span>
+        </a>
+
+        <div class="nav-toggle" id="navToggle">
+            <div class="icon-wrapper">
+                <span class="line top"></span>
+                <span class="line middle"></span>
+                <span class="line bottom"></span>
+            </div>
+        </div>
+    </div>
+</nav>
+<!-- ── HERO ── -->
+<section class="hero">
+    <img src="Biru Muda dan Putih Modern Minimalis Agensi Wisata Web UI Prototipe.svg" alt="" class="hero-bg" />
+    <div class="hero-overlay-gradient"></div>
+    <div class="hero-content">
+        <h1 class="hero-headline">Awali Perjalananmu<br>di Bandung</h1>
+        <p class="hero-sub">Kami menyediakan segala informasi yang kamu butuhkan untuk menemani perjalanan wisata kamu!</p>
+    </div>
+    <!-- ── SEARCH CARD ── -->
+    <div class="search-card">
+        <div class="search-tabs">
+            <span class="tab" data-tab="eksplore">Eksplore</span>
+            <span class="tab active" data-tab="discovery">Discovery +</span>
+            <span class="tab" data-tab="voyager">Voyager</span>
+            <div class="tab-divider"></div>
+            <div class="tab-option">
+                <span>Pulang – Pergi</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+            <div class="tab-option">
+                <span>1 hari</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+        </div>
+        <!-- ── PANEL: EKSPLORE ── -->
+        <div class="tab-panel" id="panel-eksplore">
+            <div class="search-fields">
+                <div class="field">
+                    <div class="field-label">Location</div>
+                    <input type="text" id="locationInput" class="field-input" placeholder="Tujuan Destinasi" autocomplete="off" />
+                </div>
+                <div class="field field-place">
+                    <div class="field-label">Place details</div>
+                    <div class="place-options">
+                        <span class="place-chip" data-value="Cultural">Cultural</span>
+                        <span class="place-chip" data-value="Cozy">Cozy</span>
+                        <span class="place-chip" data-value="Nature">Nature</span>
+                        <span class="place-chip" data-value="Culinary">Culinary</span>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="field-label">Maps | Route</div>
+                    <div class="field-value route-status" id="routeStatus">Isi location &amp; pilih kategori dulu</div>
+                </div>
+                <div class="field field-cta">
+                    <button class="cari-btn">Cari</button>
+                </div>
+            </div>
+        </div>
+        <!-- ── PANEL: DISCOVERY+ ── -->
+        <div class="tab-panel hidden" id="panel-discovery">
+            <div class="search-fields discovery-fields">
+                <div class="field">
+                    <div class="field-label">Location | Smart Route</div>
+                    <input type="text" class="field-input" placeholder="Cari destinasi atau pilih kategori..." autocomplete="off" />
+                </div>
+                <div class="field">
+                    <div class="field-label">Personalized Picks</div>
+                    <select class="field-input field-select">
+                        <option value="" disabled selected>Pilih kategori...</option>
+                        <option value="Wisata Alam">Wisata Alam</option>
+                        <option value="Kuliner Lokal">Kuliner Lokal</option>
+                        <option value="Sejarah & Budaya">Sejarah &amp; Budaya</option>
+                        <option value="Tempat Santai">Tempat Santai</option>
+                        <option value="Hidden Gems">Hidden Gems</option>
+                        <option value="Spot Foto Keren">Spot Foto Keren</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <div class="field-label">Cost Estimate</div>
+                    <select class="field-input field-select">
+                        <option value="" disabled selected>Pilih budget...</option>
+                        <option value="0-50000">Gratis – Rp 50.000</option>
+                        <option value="50000-150000">Rp 50.000 – 150.000</option>
+                        <option value="150000-300000">Rp 150.000 – 300.000</option>
+                        <option value="300000+">Rp 300.000+</option>
+                    </select>
+                </div>
+                <div class="field field-cta">
+                    <button class="cari-btn">Cari</button>
+                </div>
+            </div>
+        </div>
+        <!-- ── PANEL: VOYAGER ── -->
+        <div class="tab-panel hidden" id="panel-voyager">
+            <div class="voyager-body">
+                <div class="voyager-left">
+                    <h2 class="voyager-title">Rencanakan Perjalananmu !</h2>
+                    <p class="voyager-desc">Dengan Voyager, kamu bisa atur itinerary, budget, dan informasi place details dalam satu tempat.</p>
+                    <button class="gen-btn">Generate Itinerary</button>
+                </div>
+                <div class="voyager-illus">
+                    <img src="Koper.svg" alt="Koper Perjalanan" class="luggage-img"
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block'" />
+                    <div class="luggage-emoji" style="display:none">🧳</div>
+                </div>
+                <div class="voyager-card">
+                    <!-- MAP: hanya muncul jika sudah beli Silver / Gold -->
+                    <div class="vcard-row vcard-map" id="vcardMapRow" style="display:none;">
+                        <div class="vcard-map-placeholder"></div>
+                    </div>
+                    <!-- Teaser untuk upgrade ke Silver/Gold -->
+                    <div class="vcard-row vcard-map-lock" id="vcardMapLock">
+                        <div class="map-lock-box">
+                            <div class="map-lock-icon">🗺️</div>
+                            <div class="map-lock-text">Peta & Rute<br><span>Tersedia di Silver & Gold</span></div>
+                            <button class="map-lock-btn" id="openPackageBtn">Lihat Paket</button>
+                        </div>
+                    </div>
+                    <div class="vcard-divider"></div>
+                    <div class="vcard-row vcard-stay-row">
+                        <div class="vcard-stay-label">Menginap</div>
+                    </div>
+                    <div class="vcard-row vcard-route-row">
+                        <span class="vcard-route-tag">Pulang–Pergi</span>
+                    </div>
+                    <div class="vcard-row vcard-selectors">
+                        <div class="vcard-select-btn" id="staySelector">
+                            Menginap
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+                        </div>
+                        <div class="vcard-select-btn" id="durationSelector">
+                            3 hari
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="voyager-bar">
+                <div class="vbar-field">
+                    <div class="vbar-label">Lokasi</div>
+                    <input type="text" class="vbar-input" placeholder="Lagi dimana?" />
+                </div>
+                <div class="vbar-divider"></div>
+                <div class="vbar-field">
+                    <div class="vbar-label">Place Details</div>
+                    <div class="vbar-chips">
+                        <span class="place-chip vbar-chip" data-value="Cultural">Cultural</span>
+                        <span class="place-chip vbar-chip" data-value="Cozy">Cozy</span>
+                        <span class="place-chip vbar-chip" data-value="Nature">Nature</span>
+                        <span class="place-chip vbar-chip" data-value="Culinary">Culinary</span>
+                    </div>
+                </div>
+                <div class="vbar-divider"></div>
+                <div class="vbar-field">
+                    <div class="vbar-label">Route Optimization</div>
+                    <div class="vbar-value" id="vbarRouteDate">Klik untuk pilih</div>
+                </div>
+                <button class="budget-btn">Budget Breakdown</button>
+            </div>
+        </div>
+    </div><!-- /.search-card -->
+</section>
+<!-- ── MENU OVERLAY ── -->
+<div class="menu" id="menu">
+    <svg class="menu-bg-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1131 861" preserveAspectRatio="none">
+        <path id="menu-path" fill="#75a9b3" d="" />
+    </svg>
+    <div class="menu-col menu-col-info">
+        <div class="menu-col-info-box">
+            <p>Get in Touch</p>
+            <h3>hello@kisahanda.co</h3>
+            <h3>+62 821 0000 0000</h3>
+            <br>
+            <h6>Jl. Braga No. 42</h6>
+            <h6>Bandung, Jawa Barat</h6>
+        </div>
+    </div>
+    <div class="menu-col menu-col-links">
+        <div class="menu-brand-center">
+            <div class="menu-brand-logo-box">
+                <img src="Simple KS Letter Logo (Kisah Anda) (2).svg" class="menu-brand-logo" alt="Kembang Kelana Logo">
+            </div>
+            <div class="menu-brand-text-box">
+                <div class="menu-brand-name">Kembang Kelana</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="script.js"></script>
+<script src="script_patch.js"></script>
+<!-- Auth modal terintegrasi — load setelah script_patch.js -->
+<script src="auth-modal.js"></script>
+<script src="paket-auth-gate.js"></script>
+</body>
+</html>

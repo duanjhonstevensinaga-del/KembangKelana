@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title id="pageTitle">Artikel – Kisah Anda</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=DM+Sans:wght@400;500;600&family=League+Spartan:wght@600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet" />
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <!-- Styles: ambil variabel warna dari Blog.css lalu blog-post.css -->
+  <link rel="stylesheet" href="Blog.css" />
+  <link rel="stylesheet" href="blog-post.css" />
+
+  <!-- Supabase CDN (HARUS sebelum semua script lainnya) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+<!-- ══════════════════════════════ NAV ══════════════════════════════ -->
+<nav class="nav" id="mainNav">
+  <a href="index.html">
+    <img src="Simple KS Letter Logo (Kisah Anda) (2).svg" alt="Kisah Anda" class="nav-logo-img" />
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="index.html">Beranda</a></li>
+    <li><a href="Blog.html" class="active">Blog</a></li>
+    <li><a href="destinasi.html">Destinasi</a></li>
+    <li><a href="index.html#history">History</a></li>
+    <li><a href="index.html#ulasan">Ulasan</a></li>
+  </ul>
+
+  <!-- nav-right: tombol auth disuntikkan otomatis oleh auth-modal.js -->
+  <div class="nav-right" id="navRight">
+    <div id="navToggle" class="nav-toggle">
+      <span class="icon-wrapper">
+        <span class="line top"></span>
+        <span class="line middle"></span>
+        <span class="line bottom"></span>
+      </span>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════ MENU OVERLAY ══════════════════════════════ -->
+<div class="menu" id="menu">
+  <svg class="menu-bg-svg" viewBox="0 0 1131 861" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+    <path id="menu-path" d="M0,861 L1131,861 L1131,861 Q565.5,861 0,861 Z" fill="#1a2c30" />
+  </svg>
+  <div class="menu-brand">
+    <img src="Simple KS Letter Logo (Kisah Anda) (2).svg" alt="Logo" class="menu-logo-img" />
+    <span class="menu-brand-name">Kisah Anda</span>
+  </div>
+  <div class="menu-col-links">
+    <p class="pick-needs">PICK UR NEEDS</p>
+    <div class="button-container">
+      <button class="block-btn" onclick="window.location.href='index.html'">Beranda</button>
+      <button class="block-btn" onclick="window.location.href='Blog.html'">Blog</button>
+      <button class="block-btn" onclick="window.location.href='destinasi.html'">Destinasi</button>
+    </div>
+  </div>
+  <div class="menu-col-info">
+    <p>Get in Touch</p>
+    <h3>hello@kisahanda.co</h3>
+    <h6>+62 821 0000 0000</h6>
+    <h6>Jl. Braga No. 42<br>Bandung, Jawa Barat</h6>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ HERO ══════════════════════════════ -->
+<div class="post-hero" id="postHero">
+  <div class="post-hero-overlay"></div>
+  <div class="post-hero-content" id="postHeroContent">
+    <!-- Diisi oleh blog-post.js -->
+    <span class="post-hero-badge">Memuat...</span>
+    <h1 class="post-hero-title">Kisah Anda</h1>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ BREADCRUMB ══════════════════════════════ -->
+<nav class="post-breadcrumb">
+  <div class="post-container-narrow">
+    <a href="index.html"><i class="fas fa-home"></i> Beranda</a>
+    <span class="bc-sep">/</span>
+    <a href="Blog.html">Blog</a>
+    <span class="bc-sep">/</span>
+    <span class="bc-current" id="bcCategory">—</span>
+    <span class="bc-sep">/</span>
+    <span class="bc-current" id="bcTitle">—</span>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════ MAIN CONTENT ══════════════════════════════ -->
+<main class="post-main">
+  <div class="post-layout">
+
+    <!-- Artikel -->
+    <article class="post-article">
+      <!-- Skeleton loading -->
+      <div class="post-skeleton" id="postSkeleton">
+        <div class="sk-line sk-title"></div>
+        <div class="sk-line sk-sub"></div>
+        <div class="sk-line sk-block"></div>
+        <div class="sk-line"></div>
+        <div class="sk-line sk-short"></div>
+        <div class="sk-line"></div>
+        <div class="sk-line sk-short"></div>
+      </div>
+      <!-- Konten artikel (diisi oleh blog-post.js) -->
+      <div id="postContent" style="display:none;"></div>
+    </article>
+
+    <!-- Sidebar -->
+    <aside class="post-sidebar" id="postSidebar">
+
+      <!-- Author Card -->
+      <div class="sidebar-card">
+        <div class="author-card">
+          <div class="author-avatar" id="sidebarAvatar">KA</div>
+          <div class="author-info">
+            <span class="author-label">Ditulis oleh</span>
+            <strong id="sidebarAuthor">—</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Meta Card -->
+      <div class="sidebar-card">
+        <div class="meta-card">
+          <div class="meta-item">
+            <i class="far fa-calendar-alt"></i>
+            <div>
+              <span class="meta-label">Tanggal Tayang</span>
+              <span id="sidebarDate">—</span>
+            </div>
+          </div>
+          <div class="meta-item">
+            <i class="fas fa-tag"></i>
+            <div>
+              <span class="meta-label">Kategori</span>
+              <span id="sidebarCategory">—</span>
+            </div>
+          </div>
+          <div class="meta-item">
+            <i class="fas fa-clock"></i>
+            <div>
+              <span class="meta-label">Estimasi Baca</span>
+              <span id="sidebarReadTime">—</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Share Card -->
+      <div class="sidebar-card">
+        <p class="share-label">Bagikan Artikel</p>
+        <div class="share-btns">
+          <button class="share-btn whatsapp" title="Bagikan via WhatsApp" onclick="sharePost('whatsapp')">
+            <i class="fab fa-whatsapp"></i>
+          </button>
+          <button class="share-btn twitter" title="Bagikan via Twitter/X" onclick="sharePost('twitter')">
+            <i class="fab fa-x-twitter"></i>
+          </button>
+          <button class="share-btn copy" id="copyBtn" title="Salin tautan" onclick="sharePost('copy')">
+            <i class="fas fa-link"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Related Posts -->
+      <div class="sidebar-card related-card">
+        <p class="share-label">Artikel Lainnya</p>
+        <div id="relatedPosts">
+          <p style="font-family:'DM Sans',sans-serif;font-size:13px;color:#bbb;">Memuat...</p>
+        </div>
+      </div>
+
+    </aside>
+  </div>
+</main>
+
+<!-- ══════════════════════════════ TOAST ══════════════════════════════ -->
+<div class="toast-blog" id="toastBlog"></div>
+
+<!-- ══════════════════════════════ FOOTER ══════════════════════════════ -->
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-brand">
+      <h3>Kisah <span>Anda</span></h3>
+      <p>Jelajahi keindahan Bandung bersama kami</p>
+    </div>
+    <div class="footer-links">
+      <h4>Navigasi</h4>
+      <a href="index.html">Beranda</a>
+      <a href="Blog.html">Blog</a>
+      <a href="destinasi.html">Destinasi</a>
+    </div>
+    <div class="footer-contact">
+      <h4>Kontak</h4>
+      <p><i class="fas fa-envelope"></i> info@kisahanda.com</p>
+      <p><i class="fas fa-phone"></i> +62 812 3456 7890</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Kisah Anda. All rights reserved.</p>
+  </div>
+</footer>
+
+<!-- ══════════════════════════════ SCRIPTS ══════════════════════════════ -->
+<!-- GSAP -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+<!--
+  URUTAN PENTING:
+  1. supabase  (sudah di <head>)
+  2. auth-modal.js → inject tombol auth ke navbar, kelola sesi global
+  3. blog-post.js  → ambil artikel dari Supabase, render konten
+-->
+<script src="auth-modal.js"></script>
+<script src="blog-post.js"></script>
+
+</body>
+</html>

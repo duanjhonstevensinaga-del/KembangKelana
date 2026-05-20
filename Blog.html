@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog – Kisah Anda</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=DM+Sans:wght@400;500;600&family=League+Spartan:wght@600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet" />
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="Blog.css" />
+
+  <!-- Supabase CDN (HARUS sebelum auth-modal.js dan blog.js) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+<!-- ══════════════════════════════ NAV ══════════════════════════════ -->
+<nav class="nav" id="mainNav">
+  <a href="index.html">
+    <img src="Simple KS Letter Logo (Kisah Anda) (2).svg" alt="Kisah Anda" class="nav-logo-img" />
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="index.html">Beranda</a></li>
+        <li><a href="Blog.html">Blog</a></li>
+        <li><a href="destinasi.html">Destinasi</a></li>
+        <li><a href="history-ulasan.html">History Ulasan</a></li>
+  </ul>
+
+  <!-- nav-right: auth button disuntikkan otomatis oleh auth-modal.js -->
+  <div class="nav-right" id="navRight">
+    <div id="navToggle" class="nav-toggle">
+      <span class="icon-wrapper">
+        <span class="line top"></span>
+        <span class="line middle"></span>
+        <span class="line bottom"></span>
+      </span>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════ ADMIN INFO BAR ══════════════════════════════ -->
+<div class="admin-info-bar" id="adminInfoBar">
+  👑 Kamu masuk sebagai <span id="adminInfoName">Admin</span> — kamu bisa tambah, edit, dan hapus artikel.
+</div>
+
+<!-- ══════════════════════════════ MENU OVERLAY ══════════════════════════════ -->
+<div class="menu" id="menu">
+  <svg class="menu-bg-svg" viewBox="0 0 1131 861" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+    <path id="menu-path" d="M0,861 L1131,861 L1131,861 Q565.5,861 0,861 Z" fill="#1a2c30" />
+  </svg>
+  <div class="menu-brand">
+    <img src="Simple KS Letter Logo (Kisah Anda) (2).svg" alt="Logo" class="menu-logo-img" />
+    <span class="menu-brand-name">Kisah Anda</span>
+  </div>
+  <div class="menu-col-links">
+    <p class="pick-needs">PICK UR NEEDS</p>
+    <div class="button-container">
+      <button class="block-btn" onclick="window.location.href='index.html'">
+        <span class="char">B</span><span class="char">e</span><span class="char">r</span><span class="char">a</span><span class="char">n</span><span class="char">d</span><span class="char">a</span>
+      </button>
+      <button class="block-btn" onclick="window.location.href='Blog.html'">
+        <span class="char">B</span><span class="char">l</span><span class="char">o</span><span class="char">g</span>
+      </button>
+      <button class="block-btn" onclick="window.location.href='destinasi.html'">
+        <span class="char">D</span><span class="char">e</span><span class="char">s</span><span class="char">t</span><span class="char">i</span><span class="char">n</span><span class="char">a</span><span class="char">s</span><span class="char">i</span>
+      </button>
+    </div>
+  </div>
+  <div class="menu-col-info">
+    <p>Get in Touch</p>
+    <h3>hello@kisahanda.co</h3>
+    <h6>+62 821 0000 0000</h6>
+    <h6>Jl. Braga No. 42<br>Bandung, Jawa Barat</h6>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ HERO ══════════════════════════════ -->
+<section class="blog-hero" id="blogHero">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1>Blog Perjalanan Bandung</h1>
+    <p>Destinasi, kuliner, dan tips terbaik untuk menjelajahi Kota Kembang & sekitarnya</p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ FILTER ══════════════════════════════ -->
+<section class="blog-filter">
+  <div class="container">
+    <button class="filter-btn active" data-filter="all">Semua</button>
+    <button class="filter-btn" data-filter="destinasi">Destinasi</button>
+    <button class="filter-btn" data-filter="kuliner">Kuliner</button>
+    <button class="filter-btn" data-filter="tips">Tips</button>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ BLOG GRID ══════════════════════════════ -->
+<section class="blog-grid">
+  <div class="container">
+    <div class="grid" id="blogGrid">
+      <div class="blog-loading">
+        <div class="spinner"></div>
+        <p>Memuat artikel...</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ ADMIN FAB ══════════════════════════════ -->
+<div class="admin-fab" id="adminFab">
+  <button class="fab-btn primary" onclick="openBlogModal('add')">
+    <i class="fas fa-plus"></i> Tulis Blog Baru
+  </button>
+</div>
+
+<!-- ══════════════════════════════ BLOG MODAL (Admin) ══════════════════════════════ -->
+<div class="blog-modal-overlay" id="blogModalOverlay">
+  <div class="blog-modal">
+    <div class="modal-header">
+      <div>
+        <h2 id="blogModalTitle">✍️ Tulis Blog Baru</h2>
+        <p id="blogModalSub">Isi detail artikel blog kamu.</p>
+      </div>
+      <button class="modal-close" onclick="closeBlogModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="blogModalMode" value="add" />
+      <input type="hidden" id="blogModalId" value="" />
+
+      <div class="modal-field">
+        <label for="bTitle">Judul Artikel</label>
+        <input type="text" id="bTitle" placeholder="Masukkan judul menarik..." />
+      </div>
+      <div class="modal-row">
+        <div class="modal-field">
+          <label for="bCategory">Kategori</label>
+          <select id="bCategory">
+            <option value="destinasi">Destinasi</option>
+            <option value="kuliner">Kuliner</option>
+            <option value="tips">Tips</option>
+          </select>
+        </div>
+        <div class="modal-field">
+          <label for="bDate">Tanggal Publikasi</label>
+          <input type="date" id="bDate" />
+        </div>
+      </div>
+      <div class="modal-field">
+        <label for="bExcerpt">Ringkasan</label>
+        <textarea id="bExcerpt" placeholder="Deskripsi singkat artikel..."></textarea>
+      </div>
+      <div class="modal-field">
+        <label for="bImg">URL Gambar Cover</label>
+        <div class="img-upload-area">
+          <input type="text" id="bImg" placeholder="https://..." oninput="previewBlogImg()" />
+          <img id="bImgPreview" class="img-preview" alt="Preview" />
+        </div>
+      </div>
+      <div class="modal-field">
+        <label for="bContent">Konten Artikel (HTML)</label>
+        <textarea id="bContent" class="content-area" placeholder="<p>Tulis konten lengkap artikel di sini...</p>"></textarea>
+      </div>
+      <div class="modal-msg" id="blogModalMsg"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeBlogModal()">Batal</button>
+      <button class="btn-save" id="btnSaveBlog" onclick="saveBlog()">Simpan Artikel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ TOAST ══════════════════════════════ -->
+<div class="toast-blog" id="toastBlog"></div>
+
+<!-- ══════════════════════════════ FOOTER ══════════════════════════════ -->
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-brand">
+      <h3>Kisah <span>Anda</span></h3>
+      <p>Jelajahi keindahan Bandung bersama kami</p>
+    </div>
+    <div class="footer-links">
+      <h4>Navigasi</h4>
+      <a href="index.html">Beranda</a>
+      <a href="Blog.html">Blog</a>
+      <a href="destinasi.html">Destinasi</a>
+      <a href="index.html#history">History</a>
+      <a href="index.html#ulasan">Ulasan</a>
+    </div>
+    <div class="footer-contact">
+      <h4>Kontak</h4>
+      <p><i class="fas fa-envelope"></i>info@kisahanda.com</p>
+      <p><i class="fas fa-phone"></i>+62 812 3456 7890</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Kisah Anda. All rights reserved.</p>
+  </div>
+</footer>
+
+<!-- ══════════════════════════════ SCRIPTS ══════════════════════════════ -->
+<!-- GSAP -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+<!--
+  URUTAN PENTING:
+  1. supabase (sudah di <head>)
+  2. auth-modal.js  → inject tombol Masuk/User di navbar, handle sesi
+  3. blog.js        → load artikel, admin check, pakai window.currentUser dari auth-modal
+-->
+<script src="auth-modal.js"></script>
+<script src="blog.js"></script>
+
+</body>
+</html>

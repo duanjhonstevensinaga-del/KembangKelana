@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Upload SVG ke Supabase</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    body { font-family: sans-serif; padding: 2rem; max-width: 600px; }
+    button { padding: 10px 20px; background: #75a9b3; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; }
+    #log { margin-top: 1.5rem; font-size: 13px; line-height: 1.8; }
+    .ok  { color: green; }
+    .err { color: red; }
+  </style>
+</head>
+<body>
+  <h2>Upload SVG Destinasi → Supabase</h2>
+  <p>Pilih semua file SVG destinasi kamu sekaligus.</p>
+  <input type="file" id="files" accept=".svg,image/*" multiple />
+  <br><br>
+  <button onclick="startUpload()">Upload & Update DB</button>
+  <div id="log"></div>
+
+<script>
+const SUPABASE_URL      = "https://fvyjlwwurapxbddakdpq.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2eWpsd3d1cmFweGJkZGFrZHBxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNjkxMjUsImV4cCI6MjA5NDY0NTEyNX0.76JVhpxtplY4B0dY7VhBmh2XP_Mzooi84yPA6-vNtb0";
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// Peta nama file SVG → id destinasi di database
+const FILE_TO_ID = {
+  "Deli Bakes.svg"              : "deli-bakes",
+  "Sudut Pandang Cafe.svg"      : "sudut-pandang-cafe",
+  "Nara Park.svg"               : "nara-park",
+  "Peach Of Cake.svg"           : "peach-of-cake",
+  "Orchid Forest.svg"           : "orchid-forest",
+  "Situ Patenggang.svg"         : "situ-patenggang",
+  "Kawah Putih.svg"             : "kawah-putih",
+  "Gunung Putri.svg"            : "gunung-putri",
+  "Ranca Upas.svg"              : "ranca-upas",
+  "Taman Hutan Raya.svg"        : "tahura-juanda",
+  "Warung Nasi Ibu Imas.svg"    : "jl-sudirman",
+  "Geger Kalong Girang.svg"     : "geger-kalong",
+  "Kampung Kecil.svg"           : "kampung-daun",
+  "Museum Sribaduga.svg"        : "museum-sribaduga",
+  "Saung Angklung Udjo.svg"     : "saung-angklung-udjo",
+  "The Great Asia Africa.svg"   : "great-asia-africa",
+};
+
+function log(msg, type = '') {
+  const div = document.getElementById('log');
+  div.innerHTML += `<div class="${type}">${msg}</div>`;
+}
+
+async function startUpload() {
+  // Login dulu sebagai admin agar bisa update DB
+  const email    = prompt("Email admin:");
+  const password = prompt("Password admin:");
+  const { error: authErr } = await sb.auth.signInWithPassword({ email, password });
+  if (authErr) { log("❌ Login gagal: " + authErr.message, 'err'); return; }
+  log("✅ Login berhasil", 'ok');
+
+  const files = document.getElementById('files').files;
+  if (!files.length) { log("⚠️ Pilih file dulu!", 'err'); return; }
+
+  for (const file of files) {
+    const destId = FILE_TO_ID[file.name];
+    if (!destId) {
+      log(`⚠️ ${file.name} — tidak ada di peta FILE_TO_ID, dilewati`, 'err');
+      continue;
+    }
+
+    log(`⏳ Mengupload ${file.name}...`);
+
+    // Upload ke Storage
+    const { error: upErr } = await sb.storage
+      .from('destinasi-photos')
+      .upload(file.name, file, { upsert: true, contentType: 'image/svg+xml' });
+
+    if (upErr) {
+      log(`❌ Upload gagal (${file.name}): ${upErr.message}`, 'err');
+      continue;
+    }
+
+    // Ambil public URL
+    const { data: { publicUrl } } = sb.storage
+      .from('destinasi-photos')
+      .getPublicUrl(file.name);
+
+    // Update tabel destinations
+    const { error: dbErr } = await sb
+      .from('destinations')
+      .update({ img_url: publicUrl })
+      .eq('id', destId);
+
+    if (dbErr) {
+      log(`❌ Update DB gagal (${destId}): ${dbErr.message}`, 'err');
+    } else {
+      log(`✅ ${file.name} → ${destId}`, 'ok');
+    }
+  }
+
+  log("🎉 Selesai!", 'ok');
+}
+</script>
+</body>
+</html>
