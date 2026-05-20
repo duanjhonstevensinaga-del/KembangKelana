@@ -355,7 +355,7 @@ function initMenu() {
   const menuInfoItems    = document.querySelectorAll('.menu-col-info p, .menu-col-info h3, .menu-col-info h6');
   const menuBrandLogo    = document.querySelector('.menu-brand-logo');
   const menuBrandLogoBox = document.querySelector('.menu-brand-logo-box');
-  const menuBrandName    = document.querySelector('.menu-brand-name');
+  const menuBrandName    = document.querySelector('.menu-kk-brand-name');
   const menuInfoBox      = document.querySelector('.menu-col-info-box');
   const menuBrandTextBox = document.querySelector('.menu-brand-text-box');
 
@@ -377,7 +377,7 @@ function initMenu() {
   function buildSplit() {
     if (typeof SplitText === 'undefined' || !menuBrandName) return null;
     if (brandSplit) { brandSplit.revert(); brandSplit = null; }
-    brandSplit = new SplitText(menuBrandName, { type: 'chars', charsClass: 'char' });
+    brandSplit = new SplitText(menuBrandName, { type: 'chars', charsClass: 'kk-char' });
     gsap.set(brandSplit.chars, { opacity: 0, x: 50 });
     return brandSplit;
   }
