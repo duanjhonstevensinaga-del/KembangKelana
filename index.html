@@ -73,10 +73,20 @@
     </div>
     <!-- ── SEARCH CARD ── -->
     <div class="search-card">
+        <!-- ── VOYAGER CALLOUT BADGE ── -->
+        <div class="voyager-callout" id="voyagerCallout">
+            <div class="vc-arrow">↓</div>
+            <div class="vc-bubble">
+                <span class="vc-emoji">✈️</span>
+                <span class="vc-text">Mulai perjalananmu sekarang<br><strong>daerah sini si Jon!</strong></span>
+                <span class="vc-close" id="vcClose">✕</span>
+            </div>
+        </div>
+
         <div class="search-tabs">
             <span class="tab" data-tab="eksplore">Eksplore</span>
             <span class="tab active" data-tab="discovery">Discovery +</span>
-            <span class="tab" data-tab="voyager">Voyager</span>
+            <span class="tab voyager-tab-highlight" data-tab="voyager">Voyager</span>
             <div class="tab-divider"></div>
             <div class="tab-option">
                 <span>Pulang – Pergi</span>
@@ -321,6 +331,31 @@
     // Tutup saat resize ke desktop
     window.addEventListener("resize", function () {
         if (window.innerWidth > 768 && drawerOpen) closeDrawer();
+    });
+})();
+</script>
+<!-- ── VOYAGER CALLOUT DISMISS ── -->
+<script>
+(function () {
+    document.addEventListener('DOMContentLoaded', function () {
+        var closeBtn = document.getElementById('vcClose');
+        var callout  = document.getElementById('voyagerCallout');
+        if (closeBtn && callout) {
+            closeBtn.addEventListener('click', function () {
+                callout.classList.add('hidden');
+            });
+        }
+        // Auto-click Voyager tab when callout bubble is clicked
+        var bubble = callout ? callout.querySelector('.vc-bubble') : null;
+        if (bubble) {
+            bubble.style.cursor = 'pointer';
+            bubble.addEventListener('click', function (e) {
+                if (e.target.id === 'vcClose') return;
+                var voyagerTab = document.querySelector('[data-tab="voyager"]');
+                if (voyagerTab) voyagerTab.click();
+                callout.classList.add('hidden');
+            });
+        }
     });
 })();
 </script>
