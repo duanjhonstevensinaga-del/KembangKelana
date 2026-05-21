@@ -815,15 +815,16 @@ body {
     font-family: 'DM Sans', sans-serif;
     font-size: 10px;
     font-weight: 700;
-    letter-spacing: 1.5px;
+    letter-spacing: 2px;
     text-transform: uppercase;
     color: var(--teal);
-    background: rgba(117, 169, 179, 0.12);
-    border: 1px solid rgba(117, 169, 179, 0.3);
+    background: rgba(117, 169, 179, 0.14);
+    border: 1px solid rgba(117, 169, 179, 0.4);
     border-radius: 20px;
-    padding: 3px 10px;
+    padding: 4px 12px;
     width: fit-content;
     animation: vhb-badge-pulse 3s ease-in-out infinite;
+    backdrop-filter: blur(4px);
 }
 
 @keyframes vhb-badge-pulse {
@@ -839,32 +840,37 @@ body {
 
 .vhb-line1 {
     font-family: 'DM Sans', sans-serif;
-    font-size: clamp(15px, 1.6vw, 19px);
-    font-weight: 300;
-    color: rgba(255,255,255,0.65);
-    letter-spacing: 0.2px;
+    font-size: clamp(13px, 1.4vw, 16px);
+    font-weight: 500;
+    color: var(--teal);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.9;
 }
 
 .vhb-line2 {
     font-family: 'Boldonse', cursive;
-    font-size: clamp(22px, 2.8vw, 34px);
+    font-size: clamp(24px, 3vw, 38px);
     font-weight: 400;
     color: #fff;
     letter-spacing: -0.5px;
     line-height: 1.1;
+    text-shadow: 0 2px 20px rgba(117, 169, 179, 0.25);
 }
 
 .vhb-dot-accent {
     color: var(--teal);
+    filter: drop-shadow(0 0 8px rgba(117,169,179,0.6));
 }
 
 .vhb-sub {
     font-family: 'DM Sans', sans-serif;
-    font-size: 11px;
+    font-size: 11.5px;
     font-weight: 400;
-    color: rgba(255,255,255,0.42);
-    letter-spacing: 0.2px;
-    margin-top: 2px;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 0.3px;
+    margin-top: 5px;
+    line-height: 1.6;
 }
 
 .vhb-arrow {
