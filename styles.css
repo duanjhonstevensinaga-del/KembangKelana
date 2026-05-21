@@ -375,6 +375,15 @@ body {
     height: auto;
 }
 
+/* Hero harus ikut memanjang saat voyager mode aktif */
+.hero:has(.search-card.voyager-mode),
+.hero.hero-voyager {
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
+    padding-bottom: 3rem;
+}
+
 .voyager-body {
     display: grid;
     grid-template-columns: 1fr auto 1fr;

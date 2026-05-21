@@ -113,6 +113,8 @@ function switchTab(tabName) {
     });
     const card = document.querySelector(".search-card");
     card.classList.toggle("voyager-mode", tabName === "voyager");
+    const hero = document.querySelector(".hero");
+    if (hero) hero.classList.toggle("hero-voyager", tabName === "voyager");
 
     const tabOptions = document.querySelectorAll(".tab-option");
     tabOptions.forEach(opt => opt.style.display = tabName === "voyager" ? "none" : "");
