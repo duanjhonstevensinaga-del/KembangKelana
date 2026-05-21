@@ -867,23 +867,92 @@ body {
     color: var(--teal);
 }
 
+.vhb-features {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 6px;
+    flex-wrap: wrap;
+}
+
+.vhb-feat {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.75);
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px;
+    padding: 3px 9px;
+    letter-spacing: 0.2px;
+    white-space: nowrap;
+}
+
+.vhb-feat-dot {
+    color: rgba(255,255,255,0.25);
+    font-size: 12px;
+}
+
 .vhb-sub {
     font-family: 'DM Sans', sans-serif;
     font-size: 11px;
     font-weight: 400;
-    color: rgba(255,255,255,0.42);
+    color: rgba(255,255,255,0.48);
     letter-spacing: 0.2px;
-    margin-top: 2px;
+    margin-top: 6px;
+    font-style: italic;
+}
+
+.vhb-cta-wrap {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.vhb-cta-btn {
+    background: linear-gradient(135deg, var(--teal) 0%, #5b9ea8 100%);
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    padding: 9px 20px;
+    font-family: 'League Spartan', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    white-space: nowrap;
+    box-shadow: 0 4px 16px rgba(117,169,179,0.4);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.vhb-cta-btn:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 8px 24px rgba(117,169,179,0.55);
+}
+
+.vhb-cta-arrow {
+    display: inline-block;
+    transition: transform 0.2s ease;
+}
+
+.vhb-cta-btn:hover .vhb-cta-arrow {
+    transform: translateX(3px);
 }
 
 .vhb-arrow {
     position: relative;
     z-index: 2;
-    font-size: 20px;
+    font-size: 16px;
     color: var(--teal);
-    opacity: 0.7;
+    opacity: 0.6;
     animation: vhb-bounce 1.6s ease-in-out infinite;
-    margin-right: 0.5rem;
     flex-shrink: 0;
 }
 
@@ -899,7 +968,9 @@ body {
         padding: 0.9rem 1.2rem 0.85rem;
     }
     .vhb-sub { display: none; }
-    .vhb-arrow { font-size: 16px; }
+    .vhb-arrow { font-size: 14px; }
+    .vhb-feat-dot { display: none; }
+    .vhb-cta-btn { font-size: 11px; padding: 7px 14px; }
 }
 
 @media (max-width: 480px) {

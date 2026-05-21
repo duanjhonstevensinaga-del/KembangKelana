@@ -157,14 +157,24 @@
                     <span class="vhb-dot"></span>
                 </div>
                 <div class="vhb-inner">
-                    <div class="vhb-badge">✦ Fitur Eksklusif</div>
+                    <div class="vhb-badge">✦ Fitur Eksklusif · Hanya di Voyager</div>
                     <div class="vhb-headline">
-                        <span class="vhb-line1">Rencanamu, beres dalam hitungan detik</span>
-                        <span class="vhb-line2">Ayo Jelajahi<span class="vhb-dot-accent"> ✈</span></span>
+                        <span class="vhb-line1">Itinerary otomatis, budget rapi, rute cerdas —</span>
+                        <span class="vhb-line2">Mulai Perjalananmu Sekarang<span class="vhb-dot-accent"> ✈</span></span>
                     </div>
-                    <p class="vhb-sub">Itinerary otomatis · Rute cerdas · Budget rapi — tinggal nikmati perjalananmu</p>
+                    <div class="vhb-features">
+                        <span class="vhb-feat">⚡ Auto Itinerary</span>
+                        <span class="vhb-feat-dot">·</span>
+                        <span class="vhb-feat">🗺️ Peta & Rute Cerdas</span>
+                        <span class="vhb-feat-dot">·</span>
+                        <span class="vhb-feat">💰 Budget Breakdown</span>
+                    </div>
+                    <p class="vhb-sub">Ribuan traveler sudah merencanakan perjalanan impian mereka. Giliranmu!</p>
                 </div>
-                <div class="vhb-arrow">↓</div>
+                <div class="vhb-cta-wrap">
+                    <button class="vhb-cta-btn" id="vhbCtaBtn">Lihat Paket <span class="vhb-cta-arrow">→</span></button>
+                    <div class="vhb-arrow">↓</div>
+                </div>
             </div>
 
             <div class="voyager-body">
@@ -311,6 +321,18 @@
     // Tutup saat resize ke desktop
     window.addEventListener("resize", function () {
         if (window.innerWidth > 768 && drawerOpen) closeDrawer();
+    });
+})();
+</script>
+<!-- ── VHB CTA button wires to package modal ── -->
+<script>
+(function () {
+    document.addEventListener('DOMContentLoaded', function () {
+        var vhbBtn = document.getElementById('vhbCtaBtn');
+        var pkgBtn = document.getElementById('openPackageBtn');
+        if (vhbBtn && pkgBtn) {
+            vhbBtn.addEventListener('click', function () { pkgBtn.click(); });
+        }
     });
 })();
 </script>
