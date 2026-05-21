@@ -370,9 +370,9 @@ body {
     bottom: 1.5rem;
     top: 6rem;
     padding-bottom: 0;
-    overflow: hidden;
+    overflow: visible;
     width: 1176px;
-    height: 723.4px;
+    height: auto;
 }
 
 .voyager-body {
@@ -839,11 +839,10 @@ body {
 
 .vhb-line1 {
     font-family: 'DM Sans', sans-serif;
-    font-size: clamp(11px, 1.1vw, 14px);
-    font-weight: 400;
-    color: var(--teal);
-    letter-spacing: 0.5px;
-    white-space: nowrap;
+    font-size: clamp(15px, 1.6vw, 19px);
+    font-weight: 300;
+    color: rgba(255,255,255,0.65);
+    letter-spacing: 0.2px;
 }
 
 .vhb-line2 {
