@@ -391,6 +391,8 @@ body {
     gap: 1.5rem;
     padding: 0rem 0 1.25rem;
     min-height: 200px;
+    overflow: hidden;
+    border-radius: 0 0 12px 12px;
 }
 
 .voyager-left {
@@ -437,15 +439,18 @@ body {
 
 .voyager-illus {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: center;
     width: 200px;
+    height: 220px;
+    overflow: hidden;
 }
 
 .luggage-img {
     width: 100px;
-    height: 265px;
+    height: 215px;
     object-fit: contain;
+    object-position: bottom;
     filter: drop-shadow(0 8px 16px rgba(0,0,0,0.12));
 }
 
@@ -1126,4 +1131,21 @@ body {
 @keyframes hype-pulse {
     0%, 100% { box-shadow: 0 2px 8px rgba(239,68,68,0.35); }
     50%       { box-shadow: 0 2px 14px rgba(239,68,68,0.65), 0 0 0 3px rgba(245,158,11,0.18); }
+}
+
+/* ── NAV HIDE ON SCROLL (desktop only) ── */
+.nav {
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.35s ease;
+}
+.nav.nav--hidden {
+    transform: translateY(-120%);
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* ── FIX KOPER KELUAR ── */
+.voyager-illus {
+    overflow: hidden;
+    clip-path: inset(0 0 -10px 0); /* allow shadow bawah tapi clip atas/samping */
 }

@@ -901,3 +901,37 @@ window.addEventListener("load", loadLatestReviewsForIndex);
 
 // ── INIT ──
 switchTab("discovery");
+// ── NAV HIDE ON SCROLL (desktop only) ──
+(function () {
+    const nav = document.querySelector('.nav');
+    if (!nav) return;
+
+    let lastY = window.scrollY;
+    let ticking = false;
+
+    window.addEventListener('scroll', function () {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(function () {
+            const isMobile = window.innerWidth <= 768;
+            if (isMobile) {
+                // Mobile: always show nav, remove hidden class
+                nav.classList.remove('nav--hidden');
+                lastY = window.scrollY;
+                ticking = false;
+                return;
+            }
+
+            const currentY = window.scrollY;
+            if (currentY > lastY && currentY > 80) {
+                // Scrolling DOWN → hide
+                nav.classList.add('nav--hidden');
+            } else {
+                // Scrolling UP → show
+                nav.classList.remove('nav--hidden');
+            }
+            lastY = currentY;
+            ticking = false;
+        });
+    }, { passive: true });
+})();
