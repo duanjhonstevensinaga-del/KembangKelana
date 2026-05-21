@@ -814,7 +814,7 @@ body {
     z-index: 2;
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
+    gap: 0.65rem;
 }
 
 .vhb-badge {
@@ -843,6 +843,7 @@ body {
 .vhb-headline {
     display: flex;
     flex-direction: column;
+    gap: 0.3rem;
     line-height: 1;
 }
 
@@ -852,6 +853,7 @@ body {
     font-weight: 300;
     color: rgba(255,255,255,0.65);
     letter-spacing: 0.2px;
+    line-height: 1.4;
 }
 
 .vhb-line2 {
@@ -860,7 +862,7 @@ body {
     font-weight: 400;
     color: #fff;
     letter-spacing: -0.5px;
-    line-height: 1.1;
+    line-height: 1.25;
 }
 
 .vhb-dot-accent {
@@ -871,7 +873,6 @@ body {
     display: flex;
     align-items: center;
     gap: 6px;
-    margin-top: 6px;
     flex-wrap: wrap;
 }
 
@@ -899,8 +900,8 @@ body {
     font-weight: 400;
     color: rgba(255,255,255,0.48);
     letter-spacing: 0.2px;
-    margin-top: 6px;
     font-style: italic;
+    line-height: 1.5;
 }
 
 .vhb-cta-wrap {
