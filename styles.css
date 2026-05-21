@@ -839,10 +839,11 @@ body {
 
 .vhb-line1 {
     font-family: 'DM Sans', sans-serif;
-    font-size: clamp(15px, 1.6vw, 19px);
-    font-weight: 300;
+    font-size: clamp(11px, 1.1vw, 14px);
+    font-weight: 400;
     color: var(--teal);
-    letter-spacing: 0.2px;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
 }
 
 .vhb-line2 {
@@ -862,7 +863,7 @@ body {
     font-family: 'DM Sans', sans-serif;
     font-size: 11px;
     font-weight: 400;
-    color: rgba(255,255,255,0.58);
+    color: rgba(255,255,255,0.42);
     letter-spacing: 0.2px;
     margin-top: 2px;
 }
