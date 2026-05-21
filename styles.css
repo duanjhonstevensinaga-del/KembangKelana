@@ -748,10 +748,10 @@ body {
    ══════════════════════════════════════════════════════════ */
 .voyager-hero-banner {
     position: relative;
-    margin: -0.25rem -1.5rem 1rem;
+    margin: 0 0 1rem;
     padding: 1.1rem 2rem 1rem;
     background: linear-gradient(115deg, #222225 0%, #2e3a3d 45%, #1a2e32 100%);
-    border-radius: 14px 14px 0 0;
+    border-radius: 12px;
     overflow: hidden;
     display: flex;
     align-items: center;
@@ -965,8 +965,9 @@ body {
 /* Mobile responsive for banner */
 @media (max-width: 768px) {
     .voyager-hero-banner {
-        margin: -0.25rem -1rem 0.8rem;
+        margin: 0 0 0.8rem;
         padding: 0.9rem 1.2rem 0.85rem;
+        border-radius: 10px;
     }
     .vhb-sub { display: none; }
     .vhb-arrow { font-size: 14px; }
@@ -976,8 +977,9 @@ body {
 
 @media (max-width: 480px) {
     .voyager-hero-banner {
-        margin: -0.25rem -0.85rem 0.7rem;
+        margin: 0 0 0.7rem;
         padding: 0.8rem 1rem 0.75rem;
+        border-radius: 8px;
     }
 }
 
